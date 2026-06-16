@@ -29,8 +29,3 @@ out/
 .claude/settings.local.json
 .claude/plans/
 .claude/memory/
-
-# Leak-scan denylist — real client/staff names live here, never committed.
-# The committed .example version is the template; the real values also go in
-# the LEAKSCAN_DENYLIST GitHub Actions secret.
-.leakscan-denylist.txt

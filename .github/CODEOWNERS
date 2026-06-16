@@ -1,4 +1,0 @@
-# Every change to this public repo is reviewed by Yusuf before merge.
-# This is the human half of the contribution gate; the leak-scan workflow is the machine half.
-# Keeps client data, pricing, and internal references out of public history.
-* @itsyusufahmed
