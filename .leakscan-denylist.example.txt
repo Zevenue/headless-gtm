@@ -1,0 +1,19 @@
+# Leak-scan denylist — TEMPLATE (this file is committed; the real one is not)
+#
+# Copy this to .leakscan-denylist.txt (gitignored) for local scans, AND paste the
+# same real values into the LEAKSCAN_DENYLIST GitHub Actions secret for CI.
+#
+# One literal string per line. Lines starting with # are comments.
+# Matching is case-insensitive and word-boundary aware (a short name won't
+# match inside a longer word).
+#
+# Put here anything that must NEVER appear in this public repo:
+#   - client and prospect names
+#   - staff names
+#   - product names / codenames tied to a specific account
+#   - any specific pricing figure you want hard-blocked
+#
+# Examples (replace with real values in the private copy):
+# AcmeClientName
+# SomeProspectName
+# 12.34

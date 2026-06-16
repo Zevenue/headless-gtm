@@ -1,0 +1,52 @@
+name: leak-scan
+
+# Blocks any pricing, client/staff names, internal paths, or PII from entering
+# this public repo. Gates the lines a change ADDS (not already-public history),
+# so it must see the base ref — hence fetch-depth: 0.
+# Make this a required status check on PRs to main (branch protection).
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Load denylist from secret
+        env:
+          LEAKSCAN_DENYLIST: ${{ secrets.LEAKSCAN_DENYLIST }}
+        run: |
+          if [ -n "$LEAKSCAN_DENYLIST" ]; then
+            printf '%s\n' "$LEAKSCAN_DENYLIST" > .leakscan-denylist.txt
+            echo "Denylist loaded."
+          else
+            echo "::warning::LEAKSCAN_DENYLIST secret not set — structural patterns only."
+          fi
+
+      - name: Determine base ref
+        id: base
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "ref=origin/${{ github.base_ref }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ github.event.before }}" ] && \
+               [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+            echo "ref=${{ github.event.before }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=HEAD^" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run leak scan (added lines only)
+        env:
+          CI: "true"
+        run: python utils/leak_scan.py --diff "${{ steps.base.outputs.ref }}"
