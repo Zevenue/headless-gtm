@@ -101,7 +101,36 @@ cp .env.example .env
 pip install -r requirements.txt
 ```
 
-Python 3.10+. Every key is optional: each skill uses only the keys it needs and logs what it skips. The router (00), the gate (01-icp-qualify), the judge (05), and the writing skills need no keys at all. `.env.example` documents every variable and where to get each key. If you copy skills individually, bring `skills/_shared/` along - the chain skills read the record contract and helper modules from it. If you use the writing skills, also copy `context/` into your project root.
+Python 3.10+. If you copy skills individually, bring `skills/_shared/` along - the chain skills read the record contract and helper modules from it. If you use the writing skills, also copy `context/` into your project root.
+
+## API keys, and how far you get without them
+
+Every key is optional. `.env.example` lists all of them with signup links. Keys buy exactly one thing: **data acquisition**. The judgment half of the chain is model-only - no vendor, no account, no credits.
+
+**With no keys at all**, you can still:
+
+- **Plan and price a full chain** for an ICP (`00-gtm-router`). It costs out every step before you buy anything, so you can decide which vendor accounts are actually worth opening.
+- **Qualify a list you already have** against an ICP (`01-icp-qualify`). CSV in, verdicts with evidence out. Rows without a description get a plain-HTTP homepage fetch, which needs no scraping service.
+- **Judge signals and pick the angle** (`05-signal-builder`) from a URL or pasted content.
+- **Write the sequence and spec the variables** (`email-writer`, `creative-variable`, `gtm-context`).
+
+What you can't do without keys is *acquire* raw data - find companies you don't have, read their sites at scale, pull funding or hiring signals, resolve emails.
+
+| Key | Unlocks | Without it |
+|---|---|---|
+| `PROSPEO_API_KEY` | 01 discover + lookalike, and the Prospeo rung of 06 | No firmographic discovery. Bring your own list and enter at the gate. |
+| `APIFY_API_TOKEN` | 02 Maps discovery, `prospect-posts` | No local/SMB discovery. |
+| `FIRECRAWL_API_KEY` | 03 site extraction | 05 still judges, but only on what you paste or on vendor signals. |
+| `CRUSTDATA_API_KEY` | 04 funding, headcount, recent hires | No "what already happened" signals. |
+| `THEIRSTACK_API_KEY` | 04 open roles, and hiring-defined discovery | No hiring signals. |
+| `AIARK_API_KEY`, `BLITZ_API_KEY`, `FINDYMAIL_API_KEY`, `ZEROBOUNCE_API_KEY` | The 06 resolution waterfall and its validation | Each missing rung is skipped, not fatal - the waterfall runs on whichever you have. One key is enough to resolve email; ZeroBounce is what makes results send-safe rather than guessed. |
+
+A missing key never crashes a run. The skill logs which layer it skipped and why, and the router marks that step manual in the plan rather than silently rerouting the methodology.
+
+**Two ways in without committing to a stack:**
+
+- **You already have a list.** Gate it (01, free), scrape it (03), judge it (05). One key - Firecrawl - gets you the whole evidence-to-angle path.
+- **Your ICP is a hiring event.** TheirStack sizing counts are free when no company filter is applied, so `04-theirstack-jobs` can size a market and tell you what a pull would cost before you spend a credit.
 
 ## Use
 
