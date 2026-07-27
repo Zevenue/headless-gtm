@@ -29,4 +29,4 @@ out/
 .claude/settings.local.json
 .claude/plans/
 .claude/memory/
-.claude/skills/*/runs/
+skills/*/runs/

@@ -4,7 +4,7 @@ This repo is an outbound GTM pipeline packaged as agent skills (the SKILL.md sta
 
 ## Where things are
 
-- Skills live in `.claude/skills/` - one folder per skill, each with a `SKILL.md` spec. `.agents/skills` points at the same directory so Codex discovers them at repo level.
+- Skills live in `skills/` - one folder per skill, each with a `SKILL.md` spec. `.claude/skills` and `.agents/skills` are symlinks to it, so both Claude Code and Codex discover the skills when run from this repo.
 - The chain skills are numbered `00`-`06` by layer: router, discovery + qualification, extraction, signals, judgment, email resolution. `_shared/CONVENTIONS.md` defines the record contract every chain skill reads and writes (`records.jsonl`, additive fields, run folders, resume).
 - The writing skills (`email-writer`, `creative-variable`, `prospect-posts`, `gtm-context`) sit downstream of the chain.
 
