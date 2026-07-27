@@ -1,0 +1,16 @@
+# gtm-skills — consolidated Python dependencies for the whole skill chain.
+# Install once from the repo root:  pip install -r .claude/skills/_shared/requirements.txt
+# (In the public gtm-skills repo this file is also mirrored at the repo root.)
+
+# --- Core (needed by almost every skill) ---
+requests>=2.31          # all HTTP API calls (Prospeo, Apify, CrustData, Blitz, Findymail, ZeroBounce)
+python-dotenv>=1.0      # loads API keys from .env
+
+# --- Extraction (03-firecrawl-research) ---
+firecrawl-py>=1.0       # Firecrawl scrape/map/extract
+
+# --- Optional: Google Sheets export (01, 03, 04 only) ---
+# Skip these if you only use local CSV/JSONL output — the chain never requires Sheets.
+gspread>=6.0
+google-auth>=2.28
+google-auth-oauthlib>=1.2   # only needed the first time, to mint ~/.google/token.json
