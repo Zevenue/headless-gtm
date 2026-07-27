@@ -1,4 +1,4 @@
-# Calibration Guide — tuning signal-builder for a new vertical
+# Calibration Guide - tuning signal-builder for a new vertical
 
 The two shipped catalogs (`b2b-saas`, `vertical-smb`) cover most outbound. When a
 vertical behaves differently enough that their score bands feel wrong - agencies,

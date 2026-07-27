@@ -1,4 +1,4 @@
-# Prospeo Lookalike — Modes, Resolution, and Pattern Analysis
+# Prospeo Lookalike - Modes, Resolution, and Pattern Analysis
 
 Everything about the `company_lookalike` filter (filter #22) in one place. Read this before running a
 lookalike search for the first time in a session.
@@ -9,8 +9,8 @@ lookalike search for the first time in a session.
 2. [The three input modes](#the-three-input-modes)
 3. [Resolving domains to company IDs](#resolving-domains-to-company-ids)
 4. [Tiers and match_all](#tiers-and-match_all)
-5. [Mode 1 — lookalike list](#mode-1--lookalike-list)
-6. [Mode 2 — seed → ICP pattern analysis](#mode-2--seed--icp-pattern-analysis)
+5. [Mode 1 - lookalike list](#mode-1--lookalike-list)
+6. [Mode 2 - seed → ICP pattern analysis](#mode-2--seed--icp-pattern-analysis)
 7. [Why not stack lookalike with a full ICP](#why-not-stack-lookalike-with-a-full-icp)
 
 ---
@@ -43,13 +43,13 @@ Constraints:
 
 | Mode | Key | Value | When |
 |---|---|---|---|
-| **A — domain** | `domain` | single domain string, e.g. `"stripe.com"` | one seed company |
-| **B — company_oids** | `company_oids` | array of Prospeo company IDs, max 10 | multiple seeds / named companies |
-| **D — icp_text** | `icp_text` | free-text description, max 5,000 chars | no seed domain, just a description of the ideal company |
+| **A - domain** | `domain` | single domain string, e.g. `"stripe.com"` | one seed company |
+| **B - company_oids** | `company_oids` | array of Prospeo company IDs, max 10 | multiple seeds / named companies |
+| **D - icp_text** | `icp_text` | free-text description, max 5,000 chars | no seed domain, just a description of the ideal company |
 
 > Modes are labelled A/B/D to match Prospeo's own docs (there is no public "C"). Use exactly one.
 
-### Mode A — domain (single seed)
+### Mode A - domain (single seed)
 
 ```json
 {"company_lookalike": {"domain": "hubspot.com", "minimum_tier": "T2"}}
@@ -57,7 +57,7 @@ Constraints:
 
 Fastest path - no lookup, no credit spent resolving. Use whenever there's exactly one seed domain.
 
-### Mode B — company_oids (multiple seeds)
+### Mode B - company_oids (multiple seeds)
 
 ```json
 {"company_lookalike": {"company_oids": ["<id1>", "<id2>"], "match_all": false, "minimum_tier": "T2"}}
@@ -66,7 +66,7 @@ Fastest path - no lookup, no credit spent resolving. Use whenever there's exactl
 Resolve each domain/name to a company ID first (see below). Max 10 IDs. `match_all: false` unions each
 seed's lookalikes (broader, usually what you want); `true` intersects (companies similar to *all* seeds).
 
-### Mode D — icp_text (no seed domain)
+### Mode D - icp_text (no seed domain)
 
 ```json
 {"company_lookalike": {"icp_text": "Series A robotics companies building autonomous vehicle perception stacks, US-based, 50-200 employees", "minimum_tier": "T2"}}
@@ -105,7 +105,7 @@ Tip: a single domain never needs this - use Mode A directly and skip the credit.
 Start at T2 / `match_all: false`. Tighten to T1 or `match_all: true` if the list is too broad; loosen to T3
 if it's too thin.
 
-## Mode 1 — lookalike list
+## Mode 1 - lookalike list
 
 The lookalike matches ARE the deliverable. Run `company_lookalike` as the only filter (or plus a single
 light constraint the user explicitly asked for, e.g. a location), page through, export. Results come back
@@ -116,7 +116,7 @@ You may layer a **light** constraint (one of: `company_location_search`, `compan
 user is explicit ("similar to Stripe, but only in the US"). Do NOT layer a full ICP stack - see the last
 section for why.
 
-## Mode 2 — seed → ICP pattern analysis
+## Mode 2 - seed → ICP pattern analysis
 
 When the user wants *who to target* rather than *this exact list*, mine the 25 closest matches for an ICP:
 

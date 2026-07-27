@@ -1,7 +1,7 @@
 # Copy Variable Design Playbook
 
 ## Purpose
-When writing outbound email copy for a campaign, identify where hardcoded language should be replaced with dynamic variables to improve relevance across segments — and where it should stay hardcoded for readability.
+When writing outbound email copy for a campaign, identify where hardcoded language should be replaced with dynamic variables to improve relevance across segments - and where it should stay hardcoded for readability.
 
 ## When to use
 - Drafting or reviewing cold email copy that will be sent to multiple segments (different titles, industries, pain points)
@@ -12,19 +12,19 @@ When writing outbound email copy for a campaign, identify where hardcoded langua
 ### Step 1: Audit the copy against the data
 For each line in the email, ask:
 - Does this statement apply to >80% of the list? If yes, it can stay hardcoded.
-- Does it apply to 40-80%? Flag it — it either needs a variable or a safer generalization.
+- Does it apply to 40-80%? Flag it - it either needs a variable or a safer generalization.
 - Does it apply to <40%? It must be variablized or removed.
 
 ### Step 2: Check variable grammar fit
 Before creating a variable, test it in-sentence with 3-4 real values from the data:
-- Does it read naturally when substituted? (e.g., "40% of their week will be {{manual_task}}" — works if manual_task is an action phrase like "chasing suppliers for ETAs")
+- Does it read naturally when substituted? (e.g., "40% of their week will be {{manual_task}}" - works if manual_task is an action phrase like "chasing suppliers for ETAs")
 - Does it break grammatically with some values? If yes, either rewrite the sentence structure or normalize the variable values to a consistent grammatical form.
 
 **Variable value rules:**
-- Action variables (what someone does): use gerund form — "chasing X", "confirming Y", "reconciling Z"
-- Responsibility variables (what the JD says): use infinitive form — "validate X", "coordinate Y"
-- Noun variables (a thing): use noun phrase — "supplier exceptions", "pricing discrepancies"
-- Outcome variables (what they should be doing instead): use noun phrase — "strategic sourcing", "demand planning"
+- Action variables (what someone does): use gerund form - "chasing X", "confirming Y", "reconciling Z"
+- Responsibility variables (what the JD says): use infinitive form - "validate X", "coordinate Y"
+- Noun variables (a thing): use noun phrase - "supplier exceptions", "pricing discrepancies"
+- Outcome variables (what they should be doing instead): use noun phrase - "strategic sourcing", "demand planning"
 
 ### Step 3: Design the variable
 For each new variable, define:
@@ -56,10 +56,10 @@ Render 3-5 full emails with real data substituted. Read them aloud. Check for:
 | Applies to 40-80%, easy to variablize | Create variable |
 | Applies to 40-80%, awkward as variable | Generalize the language |
 | Applies to <40% | Remove or create a segment-specific version |
-| Critical for the hook/emotional punch | Keep hardcoded even if imperfect — test it |
+| Critical for the hook/emotional punch | Keep hardcoded even if imperfect - test it |
 
 ## Anti-patterns
-- Over-variablizing: every other word is a {{variable}} — kills readability and feels like a mail merge
+- Over-variablizing: every other word is a {{variable}} - kills readability and feels like a mail merge
 - Under-variablizing: referencing "price discrepancies" when only 25% of the list deals with pricing
 - Grammar mismatch: variable values don't fit the sentence structure
 - Missing fallbacks: blank variables = broken emails in production

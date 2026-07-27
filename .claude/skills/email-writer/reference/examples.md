@@ -15,14 +15,14 @@ Real-pattern examples drawn from Zevenue campaigns. Each annotated with signal u
 Subject: coordinator role
 
 Most supply chain coordinators I've talked to spend 40% of their week chasing suppliers for ETAs over email.
-The teams that cut that in half usually automated the exception detection first — not the ordering.
+The teams that cut that in half usually automated the exception detection first - not the ordering.
 Is that where your team's time is going too?
 ```
 
 **Why it works:**
-- **Situation line** references the exact role they're hiring for and the exact task from the JD — proves this isn't a blast
-- **Insight line** reveals a non-obvious priority (automate detection before ordering) — shows expertise
-- **Inquisition** asks for truth, not time — easy to reply "yes" or "actually our issue is X"
+- **Situation line** references the exact role they're hiring for and the exact task from the JD - proves this isn't a blast
+- **Insight line** reveals a non-obvious priority (automate detection before ordering) - shows expertise
+- **Inquisition** asks for truth, not time - easy to reply "yes" or "actually our issue is X"
 - Subject line is 2 words, lowercase, references the signal directly
 - 47 words total
 
@@ -32,7 +32,7 @@ Is that where your team's time is going too?
 
 **Context:** Offer is an events/community platform. Prospect is a yoga studio using Mindbody for booking and a separate Eventbrite page for workshops.
 
-**Signal:** Fragmented tech stack — two platforms doing what one should (Score: 7/10)
+**Signal:** Fragmented tech stack - two platforms doing what one should (Score: 7/10)
 **Pattern:** Pain-led
 
 ```
@@ -44,10 +44,10 @@ Dealing with that split?
 ```
 
 **Why it works:**
-- **Situation line** names BOTH tools — prospect immediately knows this is about them
+- **Situation line** names BOTH tools - prospect immediately knows this is about them
 - **Insight line** provides a specific stat and a surprising mechanism (existing members convert)
 - **Inquisition** is 4 words and directly asks about the pain
-- No product mentioned anywhere — entire email is about their situation
+- No product mentioned anywhere - entire email is about their situation
 - 52 words total
 
 ---
@@ -69,8 +69,8 @@ Already building that, or still figuring out what breaks first?
 
 **Why it works:**
 - **Situation line** references the exact transition (2→6) which shows knowledge of their stage
-- **Insight line** names the real fear — the thing that worked will stop working
-- **Inquisition** offers two valid answers (already building / still figuring out) — both are easy to reply to
+- **Insight line** names the real fear - the thing that worked will stop working
+- **Inquisition** offers two valid answers (already building / still figuring out) - both are easy to reply to
 - 55 words total
 
 ---
@@ -85,16 +85,16 @@ Already building that, or still figuring out what breaks first?
 ```
 Subject: onboarding reviews
 
-I read through your last 20 G2 reviews — 7 of them mention onboarding friction as the main complaint.
+I read through your last 20 G2 reviews - 7 of them mention onboarding friction as the main complaint.
 Mapped out the three patterns those reviews cluster around if it's useful.
 Want me to send it over?
 ```
 
 **Why it works:**
-- **Value line** demonstrates work already done (read 20 reviews, counted, categorized) — this is the "value-first" part
+- **Value line** demonstrates work already done (read 20 reviews, counted, categorized) - this is the "value-first" part
 - **Context line** promises a specific, useful deliverable (three patterns)
 - **Soft open** makes it easy to say yes without committing to a meeting
-- Prospect's natural response is "sure, send it" — which opens the conversation
+- Prospect's natural response is "sure, send it" - which opens the conversation
 - 44 words total
 
 ---
@@ -115,11 +115,11 @@ Is fulfillment accuracy something you're tracking closely, or more of a "we'll d
 ```
 
 **Why it works:**
-- **Situation line** uses company size as the hook since there's no specific signal — but still describes a concrete scenario (2-3 shifts, process designed for 1)
+- **Situation line** uses company size as the hook since there's no specific signal - but still describes a concrete scenario (2-3 shifts, process designed for 1)
 - **Insight line** names a specific, measurable pain (pick errors) instead of vague "warehouse challenges"
-- **Inquisition** offers two options that are both non-threatening to answer — no wrong response
+- **Inquisition** offers two options that are both non-threatening to answer - no wrong response
 - Works without any enrichment data because it targets the most common pain for the segment
-- 62 words — slightly long for Email 1, but acceptable for a fallback approach
+- 62 words - slightly long for Email 1, but acceptable for a fallback approach
 
 ---
 
@@ -133,13 +133,13 @@ Is fulfillment accuracy something you're tracking closely, or more of a "we'll d
 ```
 Subject: lead time variability
 
-Your talk at MD&M on lead time variability hit a nerve — that's the exact problem we keep hearing from procurement teams.
+Your talk at MD&M on lead time variability hit a nerve - that's the exact problem we keep hearing from procurement teams.
 Most of them trace it back to the exception detection happening too late in the cycle.
 Is that where it breaks for your team too?
 ```
 
 **Why it works:**
-- **Situation line** references the specific conference and topic — ultra-personalized without being creepy
+- **Situation line** references the specific conference and topic - ultra-personalized without being creepy
 - **Insight line** adds a layer of specificity (exception detection timing) that goes beyond what the talk likely covered
 - **Inquisition** connects their expertise (they spoke about it) to a specific operational failure point
 - 53 words total

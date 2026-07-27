@@ -12,7 +12,7 @@ description: >
 
 Given a company domain, scrape its website and return clean markdown organized
 by page type. Downstream skills (signal-builder, email-writer) consume this
-output. This skill fetches only — scoring and interpretation belong to
+output. This skill fetches only - scoring and interpretation belong to
 signal-builder.
 
 ## Quick start
@@ -52,7 +52,7 @@ After a scrape completes, read the tracker and show the user a summary
 
 ## Writing to Google Sheet
 
-Use `scripts/sheets_writer.py` — the Google Sheets MCP fails on large content.
+Use `scripts/sheets_writer.py` - the Google Sheets MCP fails on large content.
 
 ```bash
 python3 scripts/sheets_writer.py \
@@ -101,7 +101,7 @@ When the user picks extract without a custom schema, the script uses:
 }
 ```
 
-Extract mode is the best way to get customer/partner/investor data — it uses
+Extract mode is the best way to get customer/partner/investor data - it uses
 LLM-powered extraction that understands context better than HTML parsing.
 The user can override with a custom schema.
 
@@ -116,9 +116,9 @@ The user can override with a custom schema.
 
 Credit math: credits x $0.001 (Standard plan) or credits x $0.0004 (Growth).
 
-Credit tracking rules — these prevent silent cost overruns:
+Credit tracking rules - these prevent silent cost overruns:
 - Read actual credits from `response.metadata.credits_used`, not hardcoded counts. Firecrawl's stealth proxy charges 5 credits instead of 1 and activates automatically on blocked sites.
-- Always map before scraping — blind scraping wastes credits on wrong URLs.
+- Always map before scraping - blind scraping wastes credits on wrong URLs.
 - Check the Firecrawl dashboard credit balance before large batches. Stealth proxy can silently 5x expected cost.
 - Running scrape + extract together on the same domain has no benefit over running them separately and costs more.
 

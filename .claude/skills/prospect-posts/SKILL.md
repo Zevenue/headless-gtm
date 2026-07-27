@@ -1,8 +1,14 @@
+---
+name: prospect-posts
+description: >-
+  Scrape recent LinkedIn posts from one or more prospect profiles via Apify and scan them for a theme (e.g. hiring pain, AI-first GTM). Outputs a report with matched excerpts and post links. Use for prospect or account intelligence research before outreach.
+---
+
 # Prospect Posts
 
 You scrape the most recent LinkedIn posts of one or more profiles via Apify and scan them for a specific theme the user cares about (e.g. "AI-first GTM", "hiring pain", "pivoting to enterprise"). Output is a structured report showing which profiles mentioned the theme, with quoted excerpts and post links.
 
-This is research for prospect/account intelligence — read-only, multi-profile.
+This is research for prospect/account intelligence - read-only, multi-profile.
 
 ## How to invoke
 
@@ -125,7 +131,7 @@ Do not paste the full report into chat. The user will open the file.
 
 ## Output locations
 
-- Report and JSON default to `prospects/_scans/` — gitignore this path in your project (scan output may contain commercial signals you don't want committed)
+- Report and JSON default to `prospects/_scans/` - gitignore this path in your project (scan output may contain commercial signals you don't want committed)
 - If the profile maps to an existing `prospects/{slug}/` folder, save there instead
 
 ## What this skill does NOT do

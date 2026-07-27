@@ -6,7 +6,7 @@ Methodology for writing Claygent (and Claude API) extraction prompts that produc
 
 Before writing the prompt, do the task by hand on 2-3 real prospects. Narrate each step out loud. Those steps become the prompt.
 
-The reason: the AI will follow the same workflow you would. If you can't articulate the steps manually, the AI can't either — it just hides the failure behind plausible-sounding output.
+The reason: the AI will follow the same workflow you would. If you can't articulate the steps manually, the AI can't either - it just hides the failure behind plausible-sounding output.
 
 ## The four-part prompt structure
 
@@ -24,7 +24,7 @@ Numbered steps the AI must follow in order. Match the manual workflow you just w
 > 4. Rewrite it as an infinitive phrase starting with a verb (e.g., "validate...", "coordinate...", "verify...").
 
 ### Part 3: Constrain
-Explicit don'ts. This is where most prompts fail silently — the AI produces something plausible but wrong.
+Explicit don'ts. This is where most prompts fail silently - the AI produces something plausible but wrong.
 
 > - Do not paraphrase the pain as marketing language.
 > - Do not return more than one responsibility.
@@ -48,7 +48,7 @@ Always include a line specifying the grammatical form by embedding the target se
 
 > "Return a phrase that fits naturally into this sentence: `Your week is spent {{manual_task}} instead of {{high_value_task}}.`"
 
-Specifying the target sentence is what makes the output grammatically usable. Without it, the AI returns a full sentence, a noun, or marketing-speak randomly — and you end up cleaning it up downstream.
+Specifying the target sentence is what makes the output grammatically usable. Without it, the AI returns a full sentence, a noun, or marketing-speak randomly - and you end up cleaning it up downstream.
 
 Grammar forms by archetype:
 - **Verbatim-pain** → infinitive ("validate X", "coordinate Y")
@@ -56,7 +56,7 @@ Grammar forms by archetype:
 - **Strategic-alternative** → noun phrase ("strategic sourcing", "vendor strategy")
 - **Failure-mode** → noun phrase with article ("a mismatched PO", "an unconfirmed receipt")
 
-## Fallbacks — always include
+## Fallbacks - always include
 
 Every prompt needs a safe default when extraction fails. Two patterns:
 
@@ -67,10 +67,10 @@ Every prompt needs a safe default when extraction fails. Two patterns:
 Example safe-default for `Manual_Task`:
 > "If no specific manual task is identifiable, return: 'coordinating across suppliers'"
 
-## Claygent vs Claude API — which to use
+## Claygent vs Claude API - which to use
 
 - **Claygent** (in-Clay): most extraction from per-row sources (JD text, website scrape, LinkedIn activity). Lives inside the table, re-runs automatically.
-- **Claude API / ChatGPT in a separate chat**: campaign-level thinking — ICP research, angle brainstorming, prompt authoring, deep research on a sector. Not per-row.
+- **Claude API / ChatGPT in a separate chat**: campaign-level thinking - ICP research, angle brainstorming, prompt authoring, deep research on a sector. Not per-row.
 - **Sculptor** (Clay's experimental AI): good for *analyzing* an existing Clay build (finding loopholes); careful when using it to build.
 
 ## Anti-patterns

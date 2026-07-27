@@ -1,36 +1,36 @@
-# Worked Example — Shopify Subscription Software Outbound
+# Worked Example - Shopify Subscription Software Outbound
 
 A canonical end-to-end walkthrough of a creative variable spec for a real-shape campaign. Use this as the template when you spec a new campaign.
 
 ## The campaign
 
-A B2B software product helps Shopify DTC brands manage their subscription program — cancellation flows, dunning, subscriber data, replenishment forecasting. Outbound targets Director/VP of Ecommerce, Operations, or Growth at Shopify brands with $1M+ GMV running (or building) a subscription product.
+A B2B software product helps Shopify DTC brands manage their subscription program - cancellation flows, dunning, subscriber data, replenishment forecasting. Outbound targets Director/VP of Ecommerce, Operations, or Growth at Shopify brands with $1M+ GMV running (or building) a subscription product.
 
 ## Campaign angles
 
-- **Angle A — Hiring trigger**: "You're hiring an ecom/ops leader — they'll evaluate your subscription stack in 90 days"
-- **Angle B — Stage value**: "You're building/scaling subscriptions — here's what brands at your stage choose"
-- **Angle C — Pain-led switching**: "Your subscription tool is costing you revenue you can't see"
+- **Angle A - Hiring trigger**: "You're hiring an ecom/ops leader - they'll evaluate your subscription stack in 90 days"
+- **Angle B - Stage value**: "You're building/scaling subscriptions - here's what brands at your stage choose"
+- **Angle C - Pain-led switching**: "Your subscription tool is costing you revenue you can't see"
 
 ## Sources
 
-- **Primary**: Company website (subscription page, product pages, pricing) — reveals subscription model and product catalog in the prospect's own words
-- **Primary**: TheirStack / Prospeo (job postings, tech stack) — reveals hiring signals and current subscription tool
-- **Secondary**: LinkedIn posts (via Phantombuster or similar) — reveals prospect's stated values, priorities, and language patterns
-- **Secondary**: Prospeo enrichment (funding data, employee count) — firmographic context for "at your stage" framing
-- **Unusual sources to consider**: Shopify App Store reviews for the major subscription tools — would reveal specific friction with the prospect's current setup. **Tier: ABM-only.** Worth doing for top accounts but not scalable. Confirm with the campaign owner before building.
+- **Primary**: Company website (subscription page, product pages, pricing) - reveals subscription model and product catalog in the prospect's own words
+- **Primary**: TheirStack / Prospeo (job postings, tech stack) - reveals hiring signals and current subscription tool
+- **Secondary**: LinkedIn posts (via Phantombuster or similar) - reveals prospect's stated values, priorities, and language patterns
+- **Secondary**: Prospeo enrichment (funding data, employee count) - firmographic context for "at your stage" framing
+- **Unusual sources to consider**: Shopify App Store reviews for the major subscription tools - would reveal specific friction with the prospect's current setup. **Tier: ABM-only.** Worth doing for top accounts but not scalable. Confirm with the campaign owner before building.
 
 ## Variables
 
-### 1. `{{subscription_model}}` — novel (product-context)
+### 1. `{{subscription_model}}` - novel (product-context)
 
 | Field | Value |
 |---|---|
 | Grammar | noun phrase, lowercase ("subscribe-and-save at 20% off", "monthly flavor drops", "a subscription program in development") |
-| Source | Company website — `/pages/subscribe`, `/collections/subscribe`, or homepage subscription CTA |
+| Source | Company website - `/pages/subscribe`, `/collections/subscribe`, or homepage subscription CTA |
 | Extraction | Claygent on website URL |
 | Fallback | "your subscription program" |
-| Coverage | ~85% of Tier 1+2 companies; ~40% of Tier 3 (durable goods) — for Tier 3, hardcode "a membership or loyalty program" instead |
+| Coverage | ~85% of Tier 1+2 companies; ~40% of Tier 3 (durable goods) - for Tier 3, hardcode "a membership or loyalty program" instead |
 | Target sentence | "I saw you're running {{subscription_model}} on Shopify." |
 
 **Claygent prompt:**
@@ -66,7 +66,7 @@ Examples:
 
 ---
 
-### 2. `{{current_sub_tool}}` — novel (tech-context)
+### 2. `{{current_sub_tool}}` - novel (tech-context)
 
 | Field | Value |
 |---|---|
@@ -94,7 +94,7 @@ ELSE → "your current setup"
 
 ---
 
-### 3. `{{ops_grind}}` — manual-task
+### 3. `{{ops_grind}}` - manual-task
 
 | Field | Value |
 |---|---|
@@ -145,12 +145,12 @@ Examples:
 
 ---
 
-### 4. `{{strategic_work}}` — strategic-alternative
+### 4. `{{strategic_work}}` - strategic-alternative
 
 | Field | Value |
 |---|---|
 | Grammar | noun phrase, lowercase ("demand planning", "growth strategy", "product development") |
-| Source | Domain-mapped by role title — the aspirational frame |
+| Source | Domain-mapped by role title - the aspirational frame |
 | Extraction | Clay formula / VLOOKUP against role title |
 | Fallback | "strategic initiatives" |
 | Coverage | 100% (always has a value) |
@@ -169,7 +169,7 @@ Examples:
 
 ---
 
-### 5. `{{revenue_leak}}` — failure-mode
+### 5. `{{revenue_leak}}` - failure-mode
 
 | Field | Value |
 |---|---|
@@ -192,16 +192,16 @@ Examples:
 
 ---
 
-### 6. `{{hiring_signal}}` — novel (trigger)
+### 6. `{{hiring_signal}}` - novel (trigger)
 
 | Field | Value |
 |---|---|
 | Grammar | full clause, lowercase ("you're hiring a senior director of ecommerce") |
 | Source | TheirStack API + Prospeo enrichment |
 | Extraction | Clay formula against TheirStack data |
-| Fallback | DO NOT USE — segment the list. Only Angle A uses this variable. |
+| Fallback | DO NOT USE - segment the list. Only Angle A uses this variable. |
 | Coverage | ~30% of target list. Segment variable, not universal. |
-| Target sentence | "I saw {{hiring_signal}} — new leaders in that role usually audit the subscription stack in their first quarter." |
+| Target sentence | "I saw {{hiring_signal}} - new leaders in that role usually audit the subscription stack in their first quarter." |
 
 **Formula logic:**
 ```
@@ -216,14 +216,14 @@ ELSE → DO NOT USE (exclude row from Angle A segment)
 
 | Variable | Angle A (Hiring trigger) | Angle B (Building/scaling) | Angle C (Switching pain) |
 |---|---|---|---|
-| `subscription_model` | — | Required | Required |
-| `current_sub_tool` | — | — | Required |
+| `subscription_model` | - | Required | Required |
+| `current_sub_tool` | - | - | Required |
 | `ops_grind` | Optional | Optional | Required |
 | `strategic_work` | Optional | Optional | Required |
-| `revenue_leak` | — | Optional | Required |
-| `hiring_signal` | Required | — | — |
+| `revenue_leak` | - | Optional | Required |
+| `hiring_signal` | Required | - | - |
 
-**Angle A** uses the fewest variables (the hiring signal is the hook — keep it clean).
+**Angle A** uses the fewest variables (the hiring signal is the hook - keep it clean).
 **Angle B** is value-led, light on pain variables.
 **Angle C** stacks the most (pain + grind + failure mode + tool name).
 
@@ -239,9 +239,9 @@ ELSE → DO NOT USE (exclude row from Angle A segment)
 
 When you spec a new campaign, walk the four archetype questions:
 
-1. **Verbatim-pain** — is there a source (usually a JD) that contains the prospect's pain in their own words? What infinitive phrase would you extract?
-2. **Manual-task** — what does that pain *look like* on a Tuesday afternoon? What gerund describes the day-to-day grind?
-3. **Strategic-alternative** — what should they be doing instead? Build the noun-phrase mapping table by persona.
-4. **Failure-mode** — what's the specific thing that breaks and lands in their inbox? Build the noun-phrase mapping table by category.
+1. **Verbatim-pain** - is there a source (usually a JD) that contains the prospect's pain in their own words? What infinitive phrase would you extract?
+2. **Manual-task** - what does that pain *look like* on a Tuesday afternoon? What gerund describes the day-to-day grind?
+3. **Strategic-alternative** - what should they be doing instead? Build the noun-phrase mapping table by persona.
+4. **Failure-mode** - what's the specific thing that breaks and lands in their inbox? Build the noun-phrase mapping table by category.
 
 Then ask whether the angle implies any **novel** variables outside the four (a tech-stack name, a hiring trigger, a product-context anchor). For each novel variable, justify the source and tier the coverage. See "When the angle doesn't fit an archetype" in `variable-archetypes.md`.

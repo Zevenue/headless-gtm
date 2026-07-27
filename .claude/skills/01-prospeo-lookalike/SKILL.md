@@ -10,14 +10,14 @@ description: >
   pattern-built ICP to prospeo-discover for a broader search.
 ---
 
-# Prospeo Lookalike — Seed-Based Company Discovery
+# Prospeo Lookalike - Seed-Based Company Discovery
 
 Turn seed companies (domains, an ICP description, or "similar to X") into similar companies via
 Prospeo's `company_lookalike` filter (33-filter, 30M+ company database). Two ways to finish:
 
-- **Mode 1 — Lookalike list** (headline): return the actual similar companies, ranked by similarity
+- **Mode 1 - Lookalike list** (headline): return the actual similar companies, ranked by similarity
   tier. The lookalike filter runs *alone* - no ICP stacking - so you get a full list, not single digits.
-- **Mode 2 — Seed → ICP handoff**: analyze the 25 closest matches for patterns, build an ICP, and hand
+- **Mode 2 - Seed → ICP handoff**: analyze the 25 closest matches for patterns, build an ICP, and hand
   it to [`01-prospeo-discover`](../01-prospeo-discover/SKILL.md) for a broad firmographic search.
 
 Discovery (skill 01) deliberately treats lookalike as a throwaway pattern-finder and drops it before its
@@ -69,7 +69,7 @@ curl -s -X POST "https://api.prospeo.io/search-company" \
 Full curl formats, the search-suggestions key table, and the formats to avoid live in
 `references/api-curl.md` - read it before resolving values for the first time in a session.
 
-## Step 0 — Plan and enum check (internal, run once)
+## Step 0 - Plan and enum check (internal, run once)
 
 Do this silently before prompting the user. Don't narrate it or show step numbers.
 
@@ -101,7 +101,7 @@ Give me the seed companies you want to find matches for - domains, names, or a s
 description of the ideal company.
 ```
 
-## Step 1 — Collect seeds and resolve them
+## Step 1 - Collect seeds and resolve them
 
 The lookalike filter takes exactly ONE mode per call. Pick by what the user gave you:
 
@@ -132,7 +132,7 @@ Confirm the assembled lookalike filter with the user before spending a credit:
 
 Worked plain-English → lookalike JSON examples are in `references/mapping-examples.md`.
 
-## Step 2 — Pick the mode with the user
+## Step 2 - Pick the mode with the user
 
 Once seeds are ready, ask which outcome they want (or infer it from how they framed the request):
 
@@ -142,7 +142,7 @@ Once seeds are ready, ask which outcome they want (or infer it from how they fra
 If unsure, default to Mode 1 (the direct answer to "find similar companies") and offer Mode 2 as a
 follow-up. The two aren't exclusive - you can show the Mode 1 list *and* offer to distil an ICP from it.
 
-## Step 3a — Mode 1: lookalike list
+## Step 3a - Mode 1: lookalike list
 
 Run `POST /search-company` with `company_lookalike` as the **only** filter (optionally plus a light
 location or size constraint the user explicitly asked for - but never a full ICP stack, which collapses
@@ -167,7 +167,7 @@ Next steps:
 If `total_count` is over 2,000, suggest tightening the tier before a full export. If it's under 10, suggest
 loosening the tier (`T3`) or dropping any extra constraint you stacked on.
 
-## Step 3b — Mode 2: seed → ICP handoff
+## Step 3b - Mode 2: seed → ICP handoff
 
 Use the lookalike matches to *build an ICP*, then route to discovery for the broad search.
 
@@ -199,7 +199,7 @@ Use the lookalike matches to *build an ICP*, then route to discovery for the bro
 > hand it the confirmed ICP instead of running the search here - it adds mandatory-filter defaults and
 > optional-filter recommendations. An option, not a prerequisite; this skill runs the ICP on its own.
 
-## Step 4 — Export (only when asked)
+## Step 4 - Export (only when asked)
 
 Export uses the Python script, which paginates the search and writes the chain run folder. Don't paginate
 the API by hand for exports.
@@ -211,7 +211,7 @@ opt-in Sheets export needs the `gspread`/`google-auth` extras in that file)
 # Preview count without spending export credits
 python3 scripts/sheets_export.py --filters lookalike_filters.json --dry-run
 
-# Standard chain export — writes runs/<run-id>/ (records.jsonl + tracker + meta)
+# Standard chain export - writes runs/<run-id>/ (records.jsonl + tracker + meta)
 python3 scripts/sheets_export.py --filters lookalike_filters.json
 
 # Also export to Google Sheets (new spreadsheet, or an existing one)

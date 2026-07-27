@@ -7,7 +7,7 @@ comparable and dedup-able. Defined in [`../../_shared/schema.py`](../../_shared/
 | Field | Type | Source (Compass) | Notes |
 |---|---|---|---|
 | `name` | str | `title` | trimmed |
-| `domain` | str | derived from `website` | bare host, no scheme/www — **dedup key** |
+| `domain` | str | derived from `website` | bare host, no scheme/www - **dedup key** |
 | `website` | str | `website` | original URL |
 | `phone` | str | `phone` | as returned |
 | `full_address` | str | `address` | single-line |

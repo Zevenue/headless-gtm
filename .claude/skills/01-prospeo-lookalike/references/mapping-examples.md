@@ -43,7 +43,7 @@ Only when the user is explicit, and only ONE of these - never a full ICP stack (
 
 | User says | Add alongside company_lookalike |
 |-----------|--------------------------------|
-| "similar to Stripe but US only" | `"company_location_search": {"include": ["United States"]}` — resolve via search_suggestions |
+| "similar to Stripe but US only" | `"company_location_search": {"include": ["United States"]}` - resolve via search_suggestions |
 | "like HubSpot, but 50-200 employees" | `"company_headcount_range": ["51-100", "101-200"]` |
 
 ## Worked examples

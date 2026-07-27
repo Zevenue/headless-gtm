@@ -4,12 +4,12 @@ Everything about the underlying actor this skill wraps.
 
 ## Identity
 - **Actor:** `compass~crawler-google-places` (the "Compass" Google Maps scraper).
-- **Auth:** `APIFY_API_TOKEN` — Apify Console → Settings → Integrations → API tokens.
+- **Auth:** `APIFY_API_TOKEN` - Apify Console → Settings → Integrations → API tokens.
 - **Client SDKs (optional):** `apify-client` (Python / JS). This skill calls REST
   directly so no SDK is required.
 
 ## Endpoints
-**Sync (used by the skill — returns dataset items in one call, ≤300s):**
+**Sync (used by the skill - returns dataset items in one call, ≤300s):**
 ```
 POST https://api.apify.com/v2/acts/compass~crawler-google-places/run-sync-get-dataset-items?token=<APIFY_API_TOKEN>
 Content-Type: application/json
@@ -37,10 +37,10 @@ so the token doesn't land in logs.
 | `skipClosedPlaces` | bool | ✅ true | drop closed listings |
 | `scrapeContacts` | bool | ✅ `--include-emails` | emails + socials, +cost |
 | `scrapePlaceDetailPage` | bool | ✅ `--with-review-dates` | visits each detail page |
-| `categoryFilterWords` | string[] | — | tighten by category |
-| `website` | string | — | "withWebsite" / "withoutWebsite" filter |
-| `maxImages` | int | — | leave 0 to skip images (cost) |
-| `reviewsSort` | string | — | only relevant when scraping reviews |
+| `categoryFilterWords` | string[] | - | tighten by category |
+| `website` | string | - | "withWebsite" / "withoutWebsite" filter |
+| `maxImages` | int | - | leave 0 to skip images (cost) |
+| `reviewsSort` | string | - | only relevant when scraping reviews |
 
 ## Raw output fields (per place)
 `title`, `address` (+ `street`, `city`, `state`, `postalCode`, `countryCode`),
@@ -51,8 +51,8 @@ so the token doesn't land in logs.
 `scrapePlaceDetailPage`: richer per-place data including review metadata.
 
 ## Limits & behaviour
-- No fixed per-query result cap — you bound it with `maxCrawledPlacesPerSearch`.
+- No fixed per-query result cap - you bound it with `maxCrawledPlacesPerSearch`.
 - Real coverage is still limited by what Google actually lists for that query/geo.
 - Sync endpoint times out at ~300s; switch to async for big pulls.
-- Email/contacts and detail-page scraping each add cost and latency — keep off
+- Email/contacts and detail-page scraping each add cost and latency - keep off
   unless asked. See [cost-model.md](cost-model.md).

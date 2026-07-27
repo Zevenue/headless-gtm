@@ -15,12 +15,12 @@ emails = (max_results / 1000) * COST_PER_1K_EMAILS   # only if --include-emails
 estimate = places + emails
 ```
 `--with-review-dates` (detail-page scraping) adds real cost on Apify but isn't
-modeled as a separate line yet — treat it as a meaningful multiplier on latency
+modeled as a separate line yet - treat it as a meaningful multiplier on latency
 and spend, and confirm against your dashboard after the first run.
 
 ## The gate
 - The estimate is **always printed** before any API call.
-- `--estimate-only` prints it and exits (no spend) — use it to sanity-check.
+- `--estimate-only` prints it and exits (no spend) - use it to sanity-check.
 - If `estimate > $10` and you didn't pass `--yes`:
   - interactive terminal → asks `Proceed? [y/N]`
   - non-interactive (no TTY) → hard-stops with an error telling you to add `--yes`.

@@ -1,4 +1,4 @@
-# Prospeo API — Exact Curl Formats
+# Prospeo API - Exact Curl Formats
 
 Read this when you need the precise request shapes, the full search-suggestions key table, or the wrong formats to avoid. All calls use direct HTTP via curl with the `X-KEY: $PROSPEO_API_KEY` header. Don't use MCP tools for Prospeo - the MCP abstraction uses different field names that fail against the raw API (see "Formats to avoid" below).
 

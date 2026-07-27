@@ -3,7 +3,7 @@
 How to phrase `search_term` and `geo` so Compass returns the right businesses.
 
 ## Search-term phrasing
-Use the term a customer would type into Google Maps — singular service noun, no
+Use the term a customer would type into Google Maps - singular service noun, no
 filler. Add a qualifier only when the plain term is too broad.
 
 | Vertical | Good `search_term` | Avoid |
@@ -18,14 +18,14 @@ filler. Add a qualifier only when the plain term is too broad.
 | Pet | `pet grooming`, `veterinary clinic` | "pet services" |
 
 Tip: run two narrow terms rather than one vague one (e.g. `nail salon` +
-`hair salon`) — recall is usually higher and cleaner than `beauty salon`.
+`hair salon`) - recall is usually higher and cleaner than `beauty salon`.
 
 ## Geo formatting
 `geo` is free-text passed to `locationQuery`. Granularity controls coverage:
-- **City** — `"Toronto, ON"`, `"San Diego, CA"` → tight, high-precision.
-- **Region/State** — `"California"`, `"Ontario"` → broad; expect more rows, more
+- **City** - `"Toronto, ON"`, `"San Diego, CA"` → tight, high-precision.
+- **Region/State** - `"California"`, `"Ontario"` → broad; expect more rows, more
   noise, higher cost.
-- **Neighborhood** — `"Scarborough, Toronto"` → very tight; good for dense sweeps.
+- **Neighborhood** - `"Scarborough, Toronto"` → very tight; good for dense sweeps.
 - Include the province/state to avoid ambiguous city names ("London, ON" vs UK).
 
 ## Sizing `max_results`
@@ -36,7 +36,7 @@ Tip: run two narrow terms rather than one vague one (e.g. `nail salon` +
 | Region / full deliverable | 1,000–2,000 |
 
 Returning far fewer rows than asked usually means the geo is too narrow or the
-term too specific — broaden one of them.
+term too specific - broaden one of them.
 
 ## `min_rating`
 - `4.0` (default) matches the Step-2 eval and filters obvious low-quality places.

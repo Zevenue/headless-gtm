@@ -33,7 +33,7 @@ uses the 03-firecrawl-research skill if installed, or any plain fetch tool other
 │   ├── signal-types-vertical-smb.md      vertical SMB calibration catalog
 │   └── calibration-guide.md              reply-gym format for calibrating new verticals
 └── scripts/
-    └── signal_io.py                      collect / emit / status — batch chain I/O
+    └── signal_io.py                      collect / emit / status - batch chain I/O
 ```
 
 Evals for this skill are maintained in Zevenue's private source repo and run

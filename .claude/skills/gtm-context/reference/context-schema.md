@@ -1,6 +1,6 @@
 # Context Schema
 
-The schemas below are what `gtm-context` writes and what every other skill reads. Keep them tight — these files reload every session.
+The schemas below are what `gtm-context` writes and what every other skill reads. Keep them tight - these files reload every session.
 
 ---
 
@@ -34,7 +34,7 @@ The #1 reason prospects don't buy. One sentence.
 One or two named customers + outcome. Or a statistic. Real proof, not "we've helped many companies."
 ```
 
-### Example — filled in
+### Example - filled in
 
 ```markdown
 # Offer
@@ -49,7 +49,7 @@ We build the outbound system that turns a Series A team's first SDR into a pipel
 - Vertical: B2B SaaS (vertical-agnostic, but lean toward dev tools / RevOps / vertical SaaS)
 
 ## The problem we solve
-Founders raise a Series A, hire one SDR, and watch them flounder for 6 months because there's no playbook, no signals, and no system. We build the outbound engine — signals, sequences, deliverability, reporting — and hand it off so the SDR ramps in weeks instead of quarters.
+Founders raise a Series A, hire one SDR, and watch them flounder for 6 months because there's no playbook, no signals, and no system. We build the outbound engine - signals, sequences, deliverability, reporting - and hand it off so the SDR ramps in weeks instead of quarters.
 
 ## Trigger event
 Just hired their first SDR (or first sales lead) post-Series-A. The clock is ticking on the SDR's ramp window.
@@ -58,7 +58,7 @@ Just hired their first SDR (or first sales lead) post-Series-A. The clock is tic
 "We're going to hire a head of sales who will figure this out." (Reality: they won't, for 6 months. The system needs to exist before the leader arrives.)
 
 ## Proof
-Built the outbound engine for Sweatpals (Series A, $16M raised) — went from 0 to 200 booked meetings in 90 days. Mandel AI (YC) is running on the same playbook now.
+Built the outbound engine for Sweatpals (Series A, $16M raised) - went from 0 to 200 booked meetings in 90 days. Mandel AI (YC) is running on the same playbook now.
 ```
 
 ---
@@ -118,6 +118,6 @@ Who actually signs off + who blocks.
 
 ## Editing rules
 
-- Keep both files under 600 words combined. They reload every session — bigger files cost tokens and make agents slower.
+- Keep both files under 600 words combined. They reload every session - bigger files cost tokens and make agents slower.
 - One file per concept. Don't merge offer.md and icp.md. Don't split offer.md into 5 sub-files.
 - Update at most quarterly. If the offer is changing every week, the offer isn't ready to outbound on yet.

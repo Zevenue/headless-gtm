@@ -9,10 +9,10 @@
 | "US" / "America" / "United States" | `"company_location_search": {"include": ["United States"]}` |
 | "US and UK" | `"company_location_search": {"include": ["United States", "United Kingdom"]}` |
 | "Europe except France" | `"company_location_search": {"include": ["Germany", "United Kingdom", ...], "exclude": ["France"]}` |
-| "Bay Area" / "SF" | `"company_location_search": {"include": ["San Francisco Bay Area"]}` — resolve via search_suggestions |
+| "Bay Area" / "SF" | `"company_location_search": {"include": ["San Francisco Bay Area"]}` - resolve via search_suggestions |
 | "DACH region" | `"company_location_search": {"include": ["Germany", "Austria", "Switzerland"]}` |
 
-> Always resolve location values via `POST /search-suggestions` with `{"location_search": "..."}` — see SKILL.md for exact curl format.
+> Always resolve location values via `POST /search-suggestions` with `{"location_search": "..."}` - see SKILL.md for exact curl format.
 
 ## Company Size Mappings
 
@@ -32,7 +32,7 @@
 | "SaaS" | `"company_type": {"subtypes": {"include": ["SaaS"]}}` |
 | "B2B SaaS" | `"company_type": {"business_model": "b2b", "subtypes": {"include": ["SaaS"]}}` |
 | "AI company" | `"company_type": {"is_mainly_ai": true}` |
-| "healthcare" | `"company_industry": {"include": ["Hospitals and Health Care", "Medical Practices", "Mental Health Care", "Medical Equipment Manufacturing"]}` — show options, let user pick |
+| "healthcare" | `"company_industry": {"include": ["Hospitals and Health Care", "Medical Practices", "Mental Health Care", "Medical Equipment Manufacturing"]}` - show options, let user pick |
 | "fintech" | `"company_type": {"subtypes": {"include": ["FinTech"]}}` or `"company_industry": {"include": ["Financial Services"]}` + `"company_type": {"subtypes": {"include": ["SaaS", "Platform"]}}` |
 | "exclude consulting" | `"company_industry": {"exclude": ["Business Consulting and Services", "Management Consulting"]}` |
 | "software development only" | `"company_industry": {"include": ["Software Development"]}` |
@@ -65,7 +65,7 @@
 | "growing engineering team" | `"company_headcount_growth": {"timeframe_month": 12, "min": 10, "departments": ["Technical"]}` |
 | "hiring engineers" | `"company_job_posting_hiring_for": {"include": ["engineer"], "match_type": "contains"}` |
 | "10+ open roles" | `"company_job_posting_quantity": {"min": 10}` |
-| "recently in the news" | `"company_news": {"timeframe_days": 90}` — needs keywords or categories |
+| "recently in the news" | `"company_news": {"timeframe_days": 90}` - needs keywords or categories |
 | "recently acquired someone" | `"company_news": {"categories": ["Mergers & Acquisitions"], "timeframe_days": 180}` |
 | "new CTO" | `"company_key_execs": {"event_types": ["CTO Appointed"], "timeframe_days": 180}` (Pro plan) |
 
@@ -73,9 +73,9 @@
 
 | User says | Filter JSON |
 |-----------|-------------|
-| "uses Salesforce" | `"company_technology": {"include": ["Salesforce"]}` — resolve via search_suggestions |
+| "uses Salesforce" | `"company_technology": {"include": ["Salesforce"]}` - resolve via search_suggestions |
 | "uses HubSpot but not Salesforce" | `"company_technology": {"include": ["HubSpot"], "exclude": ["Salesforce"]}` |
-| "AWS stack" | `"company_technology": {"include": ["Amazon Web Services"]}` — resolve exact name via search_suggestions |
+| "AWS stack" | `"company_technology": {"include": ["Amazon Web Services"]}` - resolve exact name via search_suggestions |
 
 ## Company Status
 
@@ -127,7 +127,7 @@ User: "Find private B2B SaaS companies in the US, 50-200 employees, Series A or 
 }
 ```
 
-### ICP built from a seed lookalike — no `company_lookalike` in the search
+### ICP built from a seed lookalike - no `company_lookalike` in the search
 User: "Find AI companies similar to scale.ai, US, 50-500 employees, Series A-C"
 
 Use the seed (scale.ai) to find the pattern on page 1, build the ICP, then run the final search. The

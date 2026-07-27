@@ -1,7 +1,7 @@
 ---
 name: 04-crustdata-signals
 description: >
-  Enriches company domains with structured signals from CrustData — funding
+  Enriches company domains with structured signals from CrustData - funding
   rounds, headcount growth, department growth, and recent hires. Use when the
   user wants to pull company signals, enrich domains with funding/growth/hiring
   data, check who recently joined a company, find new hires at a domain, get
@@ -18,16 +18,16 @@ departments, recent hires) and write results to Google Sheets across 5 tabs.
 
 ## Inputs
 
-1. **Domains** — a Google Sheet link/ID with a domain column, or a raw list
-2. **Hire window** (optional) — 90, 180, or 365 days back for recent hires (default: 180)
-3. **Output destination** — same sheet (new tabs), different sheet ID, or create new
+1. **Domains** - a Google Sheet link/ID with a domain column, or a raw list
+2. **Hire window** (optional) - 90, 180, or 365 days back for recent hires (default: 180)
+3. **Output destination** - same sheet (new tabs), different sheet ID, or create new
 
 If the user provides a sheet link, extract the spreadsheet ID and ask which tab
 and column contain the domains.
 
 ## Prerequisites
 
-- `CRUSTDATA_API_KEY` env var — get your API key from the [CrustData dashboard](https://crustdata.com)
+- `CRUSTDATA_API_KEY` env var - get your API key from the [CrustData dashboard](https://crustdata.com)
 - Python packages: `pip install -r ../_shared/requirements.txt` (Sheets export uses the optional `gspread`/`google-auth` extras)
 - Google Sheets OAuth2 token at `~/.google/token.json`
 
@@ -56,7 +56,7 @@ to ~4 credits/domain. Estimate with the actual hire window and expected velocity
 **JSON files are the source of truth.** Every API call saves a per-domain JSON
 to `runs/{run-id}/`. Before calling the API for any domain, check whether a
 JSON already exists in any prior run folder (older runs may sit in the legacy
-`outputs/` dir — check both). If it does, reuse it — do not spend credits
+`outputs/` dir - check both). If it does, reuse it - do not spend credits
 again. The sheets writer can combine multiple run folders.
 
 ## Process
@@ -78,7 +78,7 @@ python3 scripts/crustdata_signals.py \
   --domains domain1.com,domain2.com \
   --hire-days 180
 
-# Chain position: from an upstream records.jsonl (01/02/03) — inherits its fields
+# Chain position: from an upstream records.jsonl (01/02/03) - inherits its fields
 python3 scripts/crustdata_signals.py \
   --records ../01-prospeo-discover/runs/<run-id>/records.jsonl \
   --hire-days 180
@@ -149,12 +149,12 @@ The sheets writer auto-generates signal text:
 
 ## Key behaviors
 
-- Enrich costs 2 credits regardless of fields requested — always pull all 19 field groups.
+- Enrich costs 2 credits regardless of fields requested - always pull all 19 field groups.
 - Pre-computed growth fields from CrustData lag by 3–10 months. The script computes fresh growth from timeseries data.
 - `basic_info.industries` is often null. The writer falls back to `taxonomy.categories` then `taxonomy.professional_network_industries`.
 - Department keys from CrustData are Title Case with spaces (e.g. "Engineering", "Human Resources"). The writer handles this automatically.
 - Department timeseries uses `employee_count` as the key (not `headcount`).
-- Some companies return `updated_at: null` — a genuine coverage gap, not staleness.
+- Some companies return `updated_at: null` - a genuine coverage gap, not staleness.
 - Rate limiting is handled automatically with conservative delays.
 
 ## Shared output (records.jsonl)
@@ -175,6 +175,6 @@ instead of restarting here.
 
 ## References
 
-- `references/enrich-api.md` — company enrich endpoint docs
-- `references/person-search-api.md` — person search endpoint docs
-- [CrustData API docs](https://crustdata.com/docs) — API keys, auth headers, industry taxonomy
+- `references/enrich-api.md` - company enrich endpoint docs
+- `references/person-search-api.md` - person search endpoint docs
+- [CrustData API docs](https://crustdata.com/docs) - API keys, auth headers, industry taxonomy

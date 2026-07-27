@@ -7,11 +7,11 @@
 - **Observational.** You're describing what you see, not selling. Think journalist, not salesperson.
 - **Specific.** Name the tool, the role, the number, the process. Specificity is credibility.
 - **Casual but not sloppy.** Write like a sharp peer, not a marketer. No exclamation marks. No buzzwords.
-- **Confident but not arrogant.** "Most teams I've worked with found X" — not "You should do X."
+- **Confident but not arrogant.** "Most teams I've worked with found X" - not "You should do X."
 - **Short.** If it can be cut, cut it. Every word must earn its place.
 
 ### Tone calibration by signal strength
-- **High-intent signal (8-10):** More direct, more specific. You know something — show it.
+- **High-intent signal (8-10):** More direct, more specific. You know something - show it.
 - **Medium signal (5-7):** Slightly more exploratory. "Most companies like yours..." framing.
 - **Low/no signal (1-4):** Lead with the most common pain. More question-oriented. "Is this on your radar?"
 
@@ -27,12 +27,12 @@
 ### Never use
 - "Innovative" / "Cutting-edge" / "Leading" / "Best-in-class" (empty adjectives)
 - "Quick question" (overused, triggers spam filters)
-- "I'd love to" / "I'd be happy to" (filler — just do the thing or ask)
+- "I'd love to" / "I'd be happy to" (filler - just do the thing or ask)
 - "Hope this finds you well" (nobody means it, everybody uses it)
 - "Synergy" / "Leverage" / "Optimize" / "Streamline" (corporate speak)
 - "Just following up" / "Checking in" / "Bumping this" (needy)
 - "Guarantee" / "Free" / "Limited time" / "Act now" (spam triggers)
-- "Dear [Name]" (too formal for cold email — use first name or no greeting)
+- "Dear [Name]" (too formal for cold email - use first name or no greeting)
 
 ## Subject line guidelines
 
@@ -76,7 +76,7 @@
 
 ## Formatting rules (all emails)
 
-- Plain text only — no HTML, no images, no signatures with logos
+- Plain text only - no HTML, no images, no signatures with logos
 - No bullet points or lists in cold emails (looks templated)
 - Short paragraphs (1-2 sentences each)
 - No bold, italic, or underline
@@ -86,11 +86,11 @@
 
 ## Writing process
 
-1. Start with the signal / data — what do you KNOW about this prospect?
-2. Infer the situation — what is their Monday morning like because of this signal?
-3. Draft the insight — what would only someone who's seen this problem say?
-4. Write the inquisition — how do you ask if you're right in a way that's easy to answer?
+1. Start with the signal / data - what do you KNOW about this prospect?
+2. Infer the situation - what is their Monday morning like because of this signal?
+3. Draft the insight - what would only someone who's seen this problem say?
+4. Write the inquisition - how do you ask if you're right in a way that's easy to answer?
 5. Cut everything that isn't load-bearing
-6. Read it aloud — does it sound like something a real person would send?
+6. Read it aloud - does it sound like something a real person would send?
 7. Run the QA checklist
-8. If any check fails, rewrite — don't patch
+8. If any check fails, rewrite - don't patch

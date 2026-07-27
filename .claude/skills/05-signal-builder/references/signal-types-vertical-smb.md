@@ -1,4 +1,4 @@
-# Signal Types — `vertical-smb` calibration
+# Signal Types - `vertical-smb` calibration
 
 Catalog for prospects that are local or owner-operated businesses reached through
 Maps-style discovery rather than firmographic databases: fitness studios, event

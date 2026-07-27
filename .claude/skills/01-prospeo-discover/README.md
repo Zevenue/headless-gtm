@@ -36,7 +36,7 @@ pip install requests gspread google-auth
 # Preview the count for free (no export credits spent)
 python3 scripts/sheets_export.py --filters filters.json --dry-run
 
-# Standard chain export — writes runs/<run-id>/ (records.jsonl + tracker + meta)
+# Standard chain export - writes runs/<run-id>/ (records.jsonl + tracker + meta)
 python3 scripts/sheets_export.py --filters filters.json
 
 # Also export to Google Sheets (opt-in)

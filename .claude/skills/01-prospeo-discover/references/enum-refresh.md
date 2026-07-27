@@ -9,35 +9,35 @@ How to refresh `prospeo-enums.json` when it's older than 21 days or missing.
 
 ## What Gets Refreshed
 
-### Hardcoded values (from Prospeo API schema — rarely change)
+### Hardcoded values (from Prospeo API schema - rarely change)
 
-Write these directly — no API call needed:
+Write these directly - no API call needed:
 
-- `employee_ranges` — 11 values
-- `revenue_ranges` — 14 values
-- `funding_stages` — 23 values
-- `subtypes` — 27 values
-- `departments` — 14 values
-- `headcount_growth_departments` — 19 values
-- `seniorities` — 10 values
-- `business_models` — 8 values
-- `news_categories` — 10 values
-- `exec_events` — 24 values
-- `email_providers` — 5 values
-- `icp_departments` — 15 values
-- `icp_company_sizes` — 5 values
-- `company_statuses` — 4 values
+- `employee_ranges` - 11 values
+- `revenue_ranges` - 14 values
+- `funding_stages` - 23 values
+- `subtypes` - 27 values
+- `departments` - 14 values
+- `headcount_growth_departments` - 19 values
+- `seniorities` - 10 values
+- `business_models` - 8 values
+- `news_categories` - 10 values
+- `exec_events` - 24 values
+- `email_providers` - 5 values
+- `icp_departments` - 15 values
+- `icp_company_sizes` - 5 values
+- `company_statuses` - 4 values
 
 ### Fetched via API (may grow over time)
 
-Use curl to refresh industries — direct curl, not MCP tools.
+Use curl to refresh industries - direct curl, not MCP tools.
 
 **Procedure for industries** (target: 256 values):
 
-**Option A — Scrape from API docs (preferred, fastest):**
+**Option A - Scrape from API docs (preferred, fastest):**
 Use WebFetch on `https://prospeo.io/api-docs/enum/industries` to get the full list in one call.
 
-**Option B — Crawl via search-suggestions curl (fallback):**
+**Option B - Crawl via search-suggestions curl (fallback):**
 
 1. Run search-suggestions with 2-char prefixes to maximize coverage:
    ```bash
@@ -89,7 +89,7 @@ These are too large to cache. Resolve via curl when the user mentions specific v
 
 The full list of runtime search keys and response keys is in `references/api-curl.md`.
 
-**For technologies specifically**: the full list (4,946 values) is at https://prospeo.io/api-docs/enum/technologies but is >10MB. Runtime search-suggestions is the practical approach — the user will always specify what tech they want (e.g., "companies using HubSpot"), so a targeted lookup is enough.
+**For technologies specifically**: the full list (4,946 values) is at https://prospeo.io/api-docs/enum/technologies but is >10MB. Runtime search-suggestions is the practical approach - the user will always specify what tech they want (e.g., "companies using HubSpot"), so a targeted lookup is enough.
 
 ## After Refresh
 

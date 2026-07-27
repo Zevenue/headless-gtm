@@ -1,4 +1,4 @@
-# Signal Types — `b2b-saas` calibration
+# Signal Types - `b2b-saas` calibration
 
 Catalog for prospects that are funded or funding-track companies with title-based
 org charts: SaaS, marketplaces, tech-enabled services, enterprise software buyers.

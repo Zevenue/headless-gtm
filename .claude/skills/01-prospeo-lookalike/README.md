@@ -11,9 +11,9 @@ discover when they start from *filters*.
 
 - Takes seeds as one domain, multiple domains/names, or a free-text ICP description
 - Resolves multiple seeds to Prospeo company IDs, picks the right lookalike mode (domain / oids / icp_text)
-- **Mode 1 — lookalike list:** runs `company_lookalike` alone and returns the similar companies, ranked by
+- **Mode 1 - lookalike list:** runs `company_lookalike` alone and returns the similar companies, ranked by
   similarity tier (no ICP stacking, which would collapse the count to single digits)
-- **Mode 2 — seed → ICP handoff:** analyzes the 25 closest matches for patterns, builds an ICP, and hands it
+- **Mode 2 - seed → ICP handoff:** analyzes the 25 closest matches for patterns, builds an ICP, and hands it
   to `01-prospeo-discover`
 - Requires a **Starter+** plan (lookalike is filter #22); guards Free-plan accounts before spending a credit
 - Tracks credits and confirms cost before any export
@@ -43,7 +43,7 @@ pip install requests gspread google-auth
 # Preview the count for free (no export credits spent)
 python3 scripts/sheets_export.py --filters filters.json --dry-run
 
-# Standard chain export — writes runs/<run-id>/ (records.jsonl + tracker + meta)
+# Standard chain export - writes runs/<run-id>/ (records.jsonl + tracker + meta)
 python3 scripts/sheets_export.py --filters filters.json
 
 # Also export to Google Sheets (opt-in)

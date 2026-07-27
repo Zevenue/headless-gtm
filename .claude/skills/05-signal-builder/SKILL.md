@@ -17,7 +17,7 @@ description: >
   crustdata-signals, email finding to resolution.
 ---
 
-# Signal Builder — the judgment layer (05)
+# Signal Builder - the judgment layer (05)
 
 Signal vendors sell facts ("company X raised", "company Y is hiring"). Scrapers sell
 pages. Neither tells you whether a fact is a PQS trigger, a PVP opening, or noise for
@@ -28,8 +28,8 @@ Two ways in:
 
 | You have | Mode |
 |---|---|
-| One prospect - a URL, pasted content, or a content file | A — Single prospect |
-| Chain output - records.jsonl and run folders from 01/02/03/04 | B — Batch over records |
+| One prospect - a URL, pasted content, or a content file | A - Single prospect |
+| Chain output - records.jsonl and run folders from 01/02/03/04 | B - Batch over records |
 
 Both modes need `icp_context`, and both produce the same two outputs: a human report
 and chain records.
@@ -54,7 +54,7 @@ which one you picked. Read the catalog before scanning - it carries the per-shap
 scoring adjustments, not just examples. For a vertical neither catalog fits, see
 `references/calibration-guide.md`.
 
-## Mode A — single prospect
+## Mode A - single prospect
 
 1. Get content. Pasted or file content: use as-is. URL only: if the
    03-firecrawl-research skill is installed, run its standard mode and use the scan
@@ -64,7 +64,7 @@ scoring adjustments, not just examples. For a vertical neither catalog fits, see
 2. Judge (method below) and write the report. If this prospect is part of a chain run,
    also emit a record (Mode B, step 3).
 
-## Mode B — batch over chain records
+## Mode B - batch over chain records
 
 `scripts/signal_io.py` is stdlib-only Python - no installs. Paths below are relative
 to this skill's directory.
@@ -168,7 +168,7 @@ those domains against the anchors before emitting more.
 Signals scoring 8+ usually carry PQS. Pick PVP only when a real artifact exists to
 give (an audit, a teardown, a list), not a hypothetical one. 4 and under: Pain-led.
 
-## Output 1 — the report
+## Output 1 - the report
 
 One section per judged prospect. Keep this structure so reports stay comparable
 across prospects and runs:
@@ -183,7 +183,7 @@ across prospects and runs:
 **Implies:** {what their team is dealing with day to day}
 **Approach:** {PQS | PVP | Pain-led}
 **Angle:** {one sentence - the core message this signal enables}
-**Source:** {url or vendor ref} — "{the quotable sentence}"
+**Source:** {url or vendor ref} - "{the quotable sentence}"
 **Data points for copy:** {variable}: {value} · {variable}: {value}
 
 ### Signal 2: ... (highest score first)
@@ -198,7 +198,7 @@ Close the report with the handoff: top 1-2 signals plus the fallback are the cam
 set to pass to email-writer (or whatever writes the copy) - signal 1 drives the lead
 campaign, the fallback drives the catch-all.
 
-## Output 2 — the chain record
+## Output 2 - the chain record
 
 What 06-resolution and the router parse. One JSON object per domain in
 `records.jsonl`: the upstream record with two added fields. Upstream fields

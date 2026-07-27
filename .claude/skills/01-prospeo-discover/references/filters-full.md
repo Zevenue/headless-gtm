@@ -1,4 +1,4 @@
-# Prospeo Company Search — Complete 33-Filter Reference
+# Prospeo Company Search - Complete 33-Filter Reference
 
 All filters for `/search-company`. Read this when mapping user input to filter JSON.
 
@@ -45,16 +45,16 @@ All filters for `/search-company`. Read this when mapping user input to filter J
 
 ### 5. `company_industry`
 - `include` / `exclude`: array of strings, max 500
-- 256 valid values — check `prospeo-enums.json`
+- 256 valid values - check `prospeo-enums.json`
 
 ### 6. `company_keywords`
 - `include` / `exclude`: array of strings, max 20, 3-100 chars each
-- `include_all`: boolean — `true` = AND, `false` (default) = OR
-- `search_everywhere`: boolean — `true` (default) = all sources
-- `sources`: array — `"specialties"`, `"social_media_description"`, `"seo_description"`, `"ai_description"`, `"products_services"`, `"website_pages"`
+- `include_all`: boolean - `true` = AND, `false` (default) = OR
+- `search_everywhere`: boolean - `true` (default) = all sources
+- `sources`: array - `"specialties"`, `"social_media_description"`, `"seo_description"`, `"ai_description"`, `"products_services"`, `"website_pages"`
 
 ### 7. `company_attributes`
-- **General**: `b2b`, `demo`, `freetrial`, `downloadable`, `mobileapps`, `onlinereviews`, `pricing`, `uses_ai` — all boolean/null
+- **General**: `b2b`, `demo`, `freetrial`, `downloadable`, `mobileapps`, `onlinereviews`, `pricing`, `uses_ai` - all boolean/null
 - **Platform**: `has_api`, `has_chrome_extension`, `has_sso`, `has_uptime_guarantee`, `has_open_source`, `has_marketplace`
 - **Content**: `has_blog`, `has_podcast`, `has_community_forum`, `has_knowledge_base`, `has_academy`, `has_affiliate_program`, `has_case_studies`, `has_testimonials`
 - **Support**: `has_phone_support`, `has_email_support`, `has_chat_support`, `has_ticket_support`, `has_social_support`
@@ -69,7 +69,7 @@ All filters for `/search-company`. Read this when mapping user input to filter J
 
 ### 10. `company_type`
 - `status`: `"Private"`, `"Public"`, `"Non Profit"`, `"Other"`
-- `subtypes.include` / `subtypes.exclude`: 27 values — SaaS, Platform, AI/ML, FinTech, HealthTech, Marketplace, E-commerce, Agency, Consulting, Manufacturing, Media/Publisher, Education, Non-Profit, Government, Hardware, Professional Services, Data/Analytics, Franchise, Logistics, Real Estate, Legal, Insurance, Retail, Hospitality, Food & Beverage, Construction, Telecommunications
+- `subtypes.include` / `subtypes.exclude`: 27 values - SaaS, Platform, AI/ML, FinTech, HealthTech, Marketplace, E-commerce, Agency, Consulting, Manufacturing, Media/Publisher, Education, Non-Profit, Government, Hardware, Professional Services, Data/Analytics, Franchise, Logistics, Real Estate, Legal, Insurance, Retail, Hospitality, Food & Beverage, Construction, Telecommunications
 - `business_model`: `"b2b"`, `"b2c"`, `"b2b2c"`, `"d2c"`, `"marketplace"`, `"franchise"`, `"non_profit"`, `"government"`
 - Boolean flags: `is_retail`, `is_marketplace`, `is_mainly_ai`, `is_mainly_crypto`, `multi_product`, `has_free_tier`, `is_self_serve`, `is_sales_led`, `has_usage_pricing`, `has_subscription`, `has_enterprise_plan`, `has_public_pricing`
 
@@ -80,7 +80,7 @@ All filters for `/search-company`. Read this when mapping user input to filter J
 ### 12. `company_headcount_growth`
 - `timeframe_month`: `3`, `6`, `12`, or `24`
 - `min` / `max`: -100 to 10,000 (percentage)
-- `departments`: array of strings, max 10 — Administrative, Consulting, Customer service, Design / UI / UX, Education, Finance, General management, HR, Legal, Marketing, Medical, Operations, Product, Project management, Real estate, Research, Sales, Technical, Trades
+- `departments`: array of strings, max 10 - Administrative, Consulting, Customer service, Design / UI / UX, Education, Finance, General management, HR, Legal, Marketing, Medical, Operations, Product, Project management, Real estate, Research, Sales, Technical, Trades
 
 ### 13. `company_email_provider`
 - Array of strings: `"Google"`, `"Microsoft"`, `"Proofpoint"`, `"Mimecast"`, `"Other"`
@@ -100,7 +100,7 @@ All filters for `/search-company`. Read this when mapping user input to filter J
 
 ### 17. `company_news`
 - `keywords`: array, max 20, 100 chars each
-- `categories`: array, max 10 — Funding & Investment, Mergers & Acquisitions, Product Launch, Partnership, Expansion, Layoffs & Restructuring, IPO, Leadership Change, Legal & Regulatory, Awards & Recognition
+- `categories`: array, max 10 - Funding & Investment, Mergers & Acquisitions, Product Launch, Partnership, Expansion, Layoffs & Restructuring, IPO, Leadership Change, Legal & Regulatory, Awards & Recognition
 - `timeframe_days`: 60, 90 (default), 180, 365
 - At least one of keywords or categories required
 
@@ -117,7 +117,7 @@ All filters for `/search-company`. Read this when mapping user input to filter J
 - `include_unknown_revenue`: boolean
 
 ### 20. `company_funding`
-- `stage`: array — 23 values (Angel through Undisclosed)
+- `stage`: array - 23 values (Angel through Undisclosed)
 - `funding_date`: 30, 60, 90, 180, 270, 365 (days since last funding)
 - `last_funding.min` / `last_funding.max`: revenue range values
 - `total_funding.min` / `total_funding.max`: revenue range values
@@ -127,13 +127,13 @@ All filters for `/search-company`. Read this when mapping user input to filter J
 
 ### 21. `company_technology`
 - `include` / `exclude`: array, max 20 each
-- 4,946 valid values — **resolve via `/search-suggestions`**
+- 4,946 valid values - **resolve via `/search-suggestions`**
 
 ### 22. `company_lookalike`
-- **Mode A — company_oids**: array of Prospeo company IDs, max 10
-- **Mode B — icp_text**: string, max 5,000 chars
-- **Mode D — domain**: string (single domain)
-- `match_all`: boolean — true = intersection, false (default) = union
+- **Mode A - company_oids**: array of Prospeo company IDs, max 10
+- **Mode B - icp_text**: string, max 5,000 chars
+- **Mode D - domain**: string (single domain)
+- `match_all`: boolean - true = intersection, false (default) = union
 - `same_language`: boolean
 - `minimum_tier`: `"T1"` (most similar), `"T2"`, `"T3"` (broadest, default)
 - Use exactly ONE mode per call
@@ -141,7 +141,7 @@ All filters for `/search-company`. Read this when mapping user input to filter J
 ### 23. `company_job_posting_hiring_for`
 - `include` / `exclude`: array, max 500, 1-200 chars
 - `match_type`: `"contains"` (default) or `"exact"`
-- `boolean_search`: string, max 500 terms — cannot combine with include/exclude
+- `boolean_search`: string, max 500 terms - cannot combine with include/exclude
 
 ### 24. `company_job_posting_quantity`
 - `min` / `max`: 0–5,000
@@ -152,11 +152,11 @@ All filters for `/search-company`. Read this when mapping user input to filter J
 
 ### 25. `company_icp`
 - `titles_include` / `titles_exclude`: array, max 20, 100 chars
-- `company_sizes`: array — `"micro"`, `"smb"`, `"midmarket"`, `"enterprise"`, `"large_enterprise"`
+- `company_sizes`: array - `"micro"`, `"smb"`, `"midmarket"`, `"enterprise"`, `"large_enterprise"`
 - `industries`: array, max 10, 100 chars
 - `geographic_markets`: array, max 10 (country name or ISO2)
 - `geographic_scope`: `"single_country"` or `"multi_country"`
-- `departments.include`: array, max 15 — Engineering, Sales, Marketing, Finance, HR, Operations, IT, Legal, Customer Success, Procurement, Data, Security, Design, SMB Owners, Consumers
+- `departments.include`: array, max 15 - Engineering, Sales, Marketing, Finance, HR, Operations, IT, Legal, Customer Success, Procurement, Data, Security, Design, SMB Owners, Consumers
 - `departments.match_mode`: `"any"` or `"all"`
 - `departments.other`: array, max 5, 100 chars
 
@@ -179,7 +179,7 @@ All filters for `/search-company`. Read this when mapping user input to filter J
 ## Pro Plan Filters
 
 ### 30. `company_key_execs`
-- `event_types`: array, max 10 — CEO/CTO/CFO/COO/CMO/CRO Departed/Appointed, VP of Sales/Marketing/Engineering Departed/Appointed, Any C-Level/VP/Director Departed/Appointed
+- `event_types`: array, max 10 - CEO/CTO/CFO/COO/CMO/CRO Departed/Appointed, VP of Sales/Marketing/Engineering Departed/Appointed, Any C-Level/VP/Director Departed/Appointed
 - `timeframe_days`: 60, 90 (default), 180, 365
 
 ### 31. `company_website_traffic`
@@ -193,8 +193,8 @@ All filters for `/search-company`. Read this when mapping user input to filter J
 ### 32. `company_website_search`
 - `include_keywords` / `exclude_keywords`: array, max 10, 200 chars
 - `match_mode`: `"any"` (default) or `"all"`
-- `search_in`: `page_body`, `page_titles`, `urls_only`, `headings_only`, `seo_description` — all boolean
-- `page_scope`: array — `"homepage"`, `"product"`, `"blog"`, `"careers"`, `"about"`
+- `search_in`: `page_body`, `page_titles`, `urls_only`, `headings_only`, `seo_description` - all boolean
+- `page_scope`: array - `"homepage"`, `"product"`, `"blog"`, `"careers"`, `"about"`
 - `url_contains`: string, max 200
 - Page type booleans: `has_persona_pages`, `has_industry_pages`, `has_solution_pages`, `has_careers_page`, `has_status_page`, `has_sla_page`, `has_developer_docs_page`, `has_investor_page`, `has_security_page`, `has_comparison_pages`
 

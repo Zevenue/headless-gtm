@@ -80,12 +80,12 @@ Four recurring patterns that cover most outbound personalization variables. Most
 
 Sometimes the campaign needs a variable that's not pain-based at all. Examples:
 - A competitor/tool name they're using (→ TheirStack or JD-derived)
-- A recent event (funding, launch, acquisition — → Crunchbase or press)
+- A recent event (funding, launch, acquisition - → Crunchbase or press)
 - A person's recent LinkedIn post topic (→ Phantombuster + Claygent)
 - A specific metric they publish (→ website scrape)
 - A conference they spoke at or panel they joined (→ manual research + Claygent)
 
-These are **novel variables**. For each, spec it like the four archetypes above but add a **justification** field: why this variable, why this source, why it fits the target sentence. Don't default to novel — it's more work and higher failure rate. Exhaust the four archetypes first.
+These are **novel variables**. For each, spec it like the four archetypes above but add a **justification** field: why this variable, why this source, why it fits the target sentence. Don't default to novel - it's more work and higher failure rate. Exhaust the four archetypes first.
 
 ## Archetype checklist
 
@@ -93,6 +93,6 @@ Before finalizing a variable spec, confirm:
 - [ ] Does the variable name match its archetype? (e.g., `*_task` for manual-task, `*_risk` for failure-mode)
 - [ ] Does the grammar form match the target sentence?
 - [ ] Is the source the right one for this archetype? (see `source-selection.md`)
-- [ ] Does the Claygent prompt (or mapping table) enforce the grammar — not a downstream step?
+- [ ] Does the Claygent prompt (or mapping table) enforce the grammar - not a downstream step?
 - [ ] Is there a fallback value?
 - [ ] Does coverage pass the threshold in `context/playbooks/copy-variable-design.md` for this segment?

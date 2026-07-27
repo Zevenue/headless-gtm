@@ -10,7 +10,7 @@ description: >
   themselves returned and ranked.
 ---
 
-# Prospeo Discover — B2B Company List Builder
+# Prospeo Discover - B2B Company List Builder
 
 Turn a plain-English ICP into Prospeo filter JSON, run a company search against Prospeo's
 30M+ company database (33 filters), present the result, and export to Google Sheets on request.
@@ -58,7 +58,7 @@ curl -s -X POST "https://api.prospeo.io/search-company" \
 
 `search-suggestions` takes exactly one search key per request (min 2 chars) and is how you resolve any value you are not certain of. The full table of search keys and response keys, the worked curl examples, and the wrong formats to avoid live in `references/api-curl.md` - read it before resolving values for the first time in a session.
 
-## Step 0 — Plan and enum check (internal, run once)
+## Step 0 - Plan and enum check (internal, run once)
 
 Do this silently before prompting the user. Don't narrate it or show step numbers.
 
@@ -75,7 +75,7 @@ Gate filters by plan. Only offer what the plan supports, and don't ask about fil
 
 If the invoking request already describes the ICP - which is the common case - go straight to mapping it; don't re-ask for what you were just told. Only when you have nothing to work from, ask what companies they're looking for, mentioning the plan and credit balance. Don't show examples or sample company names.
 
-## Step 1 — Read the input, pick the approach
+## Step 1 - Read the input, pick the approach
 
 Sort what the user gave you into three buckets:
 
@@ -131,7 +131,7 @@ digits.
 > and export them ranked by similarity. Reach for it when the user wants the *matches themselves*; this
 > skill handles seed → ICP on its own without it.
 
-## Step 2 — Recommend optional filters, then stop
+## Step 2 - Recommend optional filters, then stop
 
 Once the mandatory filters are covered, recommend a few optional filters before running. The skill has 33 filters - use the ones that fit, don't stop at the mandatory five and don't dump all 33.
 
@@ -157,7 +157,7 @@ Present 3-5 specific, actionable recommendations with real values, each tied to 
 
 Rules: be specific, explain why, reuse anything you discovered, cap at 5, don't recommend a filter the user already set, and if they say "skip" or "just run it" go straight to the search without pushing.
 
-## Step 3 — Search and present
+## Step 3 - Search and present
 
 Run `POST /search-company` with the assembled filters, `page: 1`. Present:
 
@@ -187,7 +187,7 @@ Next steps:
 
 If `total_count` is over 2,000, suggest narrowing before a full export. If it's under 10, suggest loosening - a broader headcount range or more industries.
 
-## Step 4 — Export (only when asked)
+## Step 4 - Export (only when asked)
 
 Export uses the Python script, which paginates the search and writes the chain run folder. Don't paginate the API by hand for exports.
 
@@ -197,7 +197,7 @@ Export uses the Python script, which paginates the search and writes the chain r
 # Preview count without spending export credits
 python3 scripts/sheets_export.py --filters filters.json --dry-run
 
-# Standard chain export — writes runs/<run-id>/ (records.jsonl + tracker + meta)
+# Standard chain export - writes runs/<run-id>/ (records.jsonl + tracker + meta)
 python3 scripts/sheets_export.py --filters filters.json --run-id 2026-07-26-saas-us
 
 # Also export to Google Sheets (new spreadsheet, or an existing one)
