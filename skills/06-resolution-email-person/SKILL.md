@@ -21,7 +21,13 @@ The one principle that governs every decision here: **bounce rate, not find rate
 
 ## Provider + auth setup
 
-Each provider reads its API key from an **environment variable** - `AIARK_API_KEY`, `PROSPEO_API_KEY`, `BLITZ_API_KEY`, `FINDYMAIL_API_KEY`, `ZEROBOUNCE_API_KEY` - loaded however your host provides them (shell export, `.env` loader, secrets manager); never hardcode a key. **The skill runs with as few as one key set:** at startup, detect which keys are present, use only those rungs, and skip the rest (log which rungs were skipped and why). Read **`references/providers.md`** for endpoints, request shapes, billing rules, and rate limits before making any call.
+Each provider reads its API key from an **environment variable** - `AIARK_API_KEY`, `PROSPEO_API_KEY`, `BLITZ_API_KEY`, `FINDYMAIL_API_KEY`, `ZEROBOUNCE_API_KEY` - never hardcode a key. This skill calls the providers with curl, and **a `.env` file is not visible to curl** - load it into the shell in the same command as the call, otherwise an empty auth header comes back as a provider auth error rather than a missing-key one:
+
+```bash
+set -a; [ -f .env ] && . ./.env; set +a
+```
+
+An exported variable or a secrets manager takes precedence and needs no prelude. **The skill runs with as few as one key set:** at startup, detect which keys are present, use only those rungs, and skip the rest (log which rungs were skipped and why). Read **`references/providers.md`** for endpoints, request shapes, billing rules, and rate limits before making any call.
 
 - **AI Ark** - rung 0, **conditional**: runs only if `AIARK_API_KEY` is set. Two modes. **(a) Passthrough:** a row that already carries an AI Ark-verified email (source flag `ai_ark`/`pre_verified`, or the caller says the list is an AI Ark export) is accepted as-is - don't re-find what's already verified. **(b) Finder:** `POST /people/export/single` turns a **LinkedIn profile URL or AI Ark person id** (not name+domain) into a BounceBan-verified email - 1 credit per valid email, 0 on a miss. Strong on **SMB operators** where Prospeo is weak. The `POST /people` *search* bills separately (~0.5 credit per returned profile), so keep searches tightly filtered and prefer `/people/export/single`.
 - **Prospeo** - title-first finder, strong on mid-market + enterprise. Charged only when a request returns results (misses are free).
@@ -125,4 +131,4 @@ Return one record per contact:
 
 When this skill runs in the chain, **add** `verification_status` - do not overwrite the upstream `confidence` field.
 
-Write results as `records.jsonl` under `runs/<run-id>/` per `_shared/CONVENTIONS.md` (CSV is an optional, derived human export). End with a **run summary**: companies in · unique after dedupe · processed · found / not found · coverage % · breakdown by `match_type` and `email_source` · any rows skipped, with the reason - a row you couldn't process is reported, never silently dropped.
+Write results as `records.jsonl` under `runs/<run-id>/` per `headless-gtm-shared/CONVENTIONS.md` (CSV is an optional, derived human export). End with a **run summary**: companies in · unique after dedupe · processed · found / not found · coverage % · breakdown by `match_type` and `email_source` · any rows skipped, with the reason - a row you couldn't process is reported, never silently dropped.

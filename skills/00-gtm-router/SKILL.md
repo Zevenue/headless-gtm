@@ -12,8 +12,10 @@ description: >
   whole chain" - or when they hand over an ICP or client brief and want prospects
   with verified emails out the other side. Also use when partial data exists (a
   company list without signals, contacts without emails) to pick the right entry
-  point mid-chain. For a single named step alone (just scrape one site, just find
-  one email), use that component skill directly.
+  point mid-chain. For a true cold start - "first campaign", "never run a
+  campaign", "no CRM", nothing to analyze yet - route to run-first-campaign,
+  the packaged workflow that sits above the chain. For a single named step alone
+  (just scrape one site, just find one email), use that component skill directly.
 ---
 
 # GTM Router - the orchestrator (00)
@@ -53,6 +55,7 @@ input is missing:
 
 | User already has | Enter the chain at |
 |---|---|
+| Nothing yet - no list, no CRM, first campaign ever | run-first-campaign - the packaged cold-start workflow (context -> source of record -> gate -> rank -> drafts -> sheet, owner approval between steps) |
 | Nothing but an ICP description | Discovery (01-prospeo-discover, 02, or 04-theirstack discover, by shape below) |
 | Example companies to find more of | 01-prospeo-lookalike - the list is **seeds**, not targets |
 | A target company list (domains) | 01-icp-qualify first, then 03/04 on the survivors |
@@ -69,7 +72,7 @@ genuinely unclear, ask - routing seeds into 03 scrapes the customers they
 already have.
 
 Inherited data passes through untouched - the chain contract is additive
-(`_shared/CONVENTIONS.md`): every record keeps its upstream fields, keyed by
+(`headless-gtm-shared/CONVENTIONS.md`): every record keeps its upstream fields, keyed by
 normalized `domain`.
 
 ## Step 1 - classify the ICP shape
@@ -151,9 +154,13 @@ The calls that make these chains work:
   with 01, then filter by 04-crustdata-signals `recent_hires`. Enriching an
   unbounded superset is the dominant cost in this shape - cap the superset in
   the plan, and run the cheaper filter first.
-- **web-scattered starts from source URLs.** Ask for the 2-5 directories or
-  listing sites where the ICP lives; 03's extract mode turns them into a company
-  list, and the chain proceeds normally from there.
+- **web-scattered starts from a proposed source of record.** Propose the 2-3
+  places these companies are already listed - a licensing registry, professional
+  college, trade association directory, or marketplace, with Maps (02) as the
+  general fallback - and confirm with the user before extracting. Don't open by
+  asking them to supply URLs: proposing the source is the plan's job, confirming
+  it is the user's. 03's "Directory and registry extraction" turns the confirmed
+  source into a company list, and the chain proceeds normally from there.
 - **Judge before you resolve - by default.** 05's ranking decides which accounts
   deserve per-contact resolution spend, and the signal work is what makes the
   email worth sending. Flip to resolve-first (06 straight after discovery,
@@ -222,12 +229,14 @@ and a correction after step 1 has already spent credits is a refund nobody issue
 
 On go-ahead:
 
-1. Create a run folder under this skill's `runs/<run-id>/` (timestamp+slug, e.g.
-   `2026-07-21-yoga-gta`): the approved `plan.md` plus `manifest.json` tracking
+1. Create a run folder at `./runs/<run-id>/` in the working directory
+   (timestamp+slug, e.g. `2026-07-21-00-router-yoga-gta`): the approved
+   `plan.md` plus `manifest.json` tracking
    `{step, skill, run_dir, status, est_cost, actual_cost}` per step.
-2. Run each step by its own SKILL.md. Each component skill writes its own
-   `runs/` folder; record that path in the manifest. Hand the previous step's
-   `records.jsonl` to the next step - never a reformatted copy.
+2. Run each step by its own SKILL.md. Every component skill writes into that
+   same `./runs/` root under its own step-prefixed run-id; record each path in
+   the manifest. Hand the previous step's `records.jsonl` to the next step by
+   explicit path - never a reformatted copy, never a guessed sibling folder.
 3. Plan approval covers the spends listed in the plan. When a component skill asks
    to confirm a spend within its plan line, proceed; anything above the line, or
    any step not in the plan, stops and asks. 01-icp-qualify's own user gates stay
@@ -257,6 +266,7 @@ and run 04"). Degrade the plan, don't silently reroute around the methodology.
 
 | Not this skill | Use instead |
 |---|---|
+| A true cold start - no list, no CRM, first campaign ever | run-first-campaign, the packaged cold-start workflow |
 | One named step ("scrape acme.com", "find this person's email") | The component skill directly |
 | Qualifying an existing list, nothing downstream | 01-icp-qualify directly |
 | Judging an existing evidence bundle | 05-signal-builder |
@@ -271,5 +281,5 @@ and run 04"). Degrade the plan, don't silently reroute around the methodology.
 - `references/unit-costs.md` - per-step unit costs, rate limits, estimation
   formulas, worked examples. Read before any estimate; update after any run where
   actuals diverged.
-- `../_shared/CONVENTIONS.md` - the chain contract: JSONL records, `runs/`
+- `../headless-gtm-shared/CONVENTIONS.md` - the chain contract: JSONL records, `runs/`
   folders, additive fields, domain as key.

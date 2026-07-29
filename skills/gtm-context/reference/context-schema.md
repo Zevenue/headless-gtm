@@ -36,6 +36,8 @@ One or two named customers + outcome. Or a statistic. Real proof, not "we've hel
 
 ### Example - filled in
 
+Illustrative only. The companies below are made up; replace every line with your own.
+
 ```markdown
 # Offer
 
@@ -58,8 +60,12 @@ Just hired their first SDR (or first sales lead) post-Series-A. The clock is tic
 "We're going to hire a head of sales who will figure this out." (Reality: they won't, for 6 months. The system needs to exist before the leader arrives.)
 
 ## Proof
-Built the outbound engine for Sweatpals (Series A, $16M raised) - went from 0 to 200 booked meetings in 90 days. Mandel AI (YC) is running on the same playbook now.
+Built the outbound engine for Northwind Labs (Series A dev-tools) - their first SDR went from a cold start to a working pipeline inside one quarter. Two more Series A teams are running the same playbook now.
 ```
+
+Write your proof the way you'd say it on a call: a named customer, what you
+built, and what changed. Resist rounding a single result into a promise - the
+number that reads as a guarantee is the one a prospect will hold you to.
 
 ---
 
@@ -102,7 +108,7 @@ Who actually signs off + who blocks.
 ## `context/offer.md` invariants the other skills depend on
 
 - `## What we sell` is the one-liner that `email-writer` uses for value-prop framing.
-- `## Trigger event` is what `signal-builder` looks for when scoring prospects 8+.
+- `## Trigger event` is what `05-signal-builder` looks for when scoring prospects 8+.
 - `## Most common objection` shapes the second email in every sequence.
 - `## Proof` populates the proof line in `email-writer` outputs.
 
@@ -110,9 +116,9 @@ Who actually signs off + who blocks.
 
 ## `context/icp.md` invariants
 
-- `## Engagement signals` are what `signal-builder` weights positively.
-- `## Anti-signals` are what `signal-builder` flags as deal-killers.
-- `## Buying committee` is what `prospect-posts` and `job-search` use to filter who's worth scraping.
+- `## Engagement signals` are what `05-signal-builder` weights positively.
+- `## Anti-signals` are what `05-signal-builder` flags as deal-killers.
+- `## Buying committee` is what `prospect-posts` and `04-theirstack-jobs` use to filter who's worth scraping.
 
 ---
 

@@ -47,7 +47,7 @@ export CRUSTDATA_API_KEY="your-crustdata-key"   # from the CrustData dashboard
 
 Only needed for the optional Google Sheets writer: an OAuth2 token at
 `~/.google/token.json` plus the `gspread`/`google-auth` extras from
-`../_shared/requirements.txt`.
+`../headless-gtm-shared/requirements.txt`.
 
 ## Layout
 

@@ -23,12 +23,12 @@ incumbent still earns its seat.
 the client does in one, incumbent sunsetting or repricing, JDs demanding incumbent
 experience (deep investment - harder switch, but validated pain).
 **Score:** 8-10 with friction evidence; 5-7 for bare usage.
-**Approach:** PQS - "Noticed you run [competitor]. Teams on it usually hit [pain]. You?"
+**Approach:** Pain-led - "Noticed you run [competitor]. Teams on it usually hit [pain]. You?"
 
 ### Adjacent tools, no direct solution
 **Look for:** same-ecosystem tools that solve neighboring problems.
 **Implies:** the problem exists and is being patched around.
-**Score:** 5-7 · **Approach:** Pain-led, using the adjacent stack as the evidence the
+**Score:** 5-7 · **Approach:** Segment fallback, using the adjacent stack as the evidence the
 problem persists.
 
 ### No tooling / visibly manual
@@ -36,7 +36,7 @@ problem persists.
 pages that read like spreadsheets.
 **Implies:** pain not yet acute, unaware, or resource-constrained - stage decides which.
 **Score:** 4-6 (a Series B running manual scores the top of the band; pre-seed the bottom).
-**Approach:** PVP - show them what automated looks like for a company their shape.
+**Approach:** Value-led - show them what automated looks like for a company their shape.
 
 ## 2. Hiring signals
 
@@ -45,25 +45,25 @@ pages that read like spreadsheets.
 does. Careers pages, job boards, postings data.
 **Implies:** pain acute enough to fund headcount; product-vs-salary ROI writes itself.
 **Score:** 8-10, higher with multiple identical openings.
-**Approach:** PQS - "Hiring a [role]? Most of that job is [task the product automates]."
+**Approach:** Pain-led - "Hiring a [role]? Most of that job is [task the product automates]."
 
 ### Hiring around the function
 **Look for:** growth in the department the client serves, without the exact role.
 **Implies:** the underlying operational load is about to grow with the team.
-**Score:** 5-7 · **Approach:** Pain-led on the coordination cost of the growth.
+**Score:** 5-7 · **Approach:** Segment fallback on the coordination cost of the growth.
 
 ### Leadership hire in the function
 **Look for:** new VP / Head / Director in the relevant function - careers page
 announcements, blog, structured people-move data.
 **Implies:** new leaders audit their systems in the first 90 days and buy quick wins.
-**Score:** 7-9 · **Approach:** PQS - "New [title]s usually audit [area] in the first
+**Score:** 7-9 · **Approach:** Pain-led - "New [title]s usually audit [area] in the first
 quarter - what's the plan for [pain]?"
 
 ### JD language describing the exact pain
 **Look for:** posting copy that narrates the problem - "manage escalations across
 email and phone", "reduce manual reconciliation", "wrangle multiple tools".
 **Implies:** the pain is written into how they describe their own operations.
-**Score:** 6-8 · **Approach:** PQS, quoting the JD line back (this is the single most
+**Score:** 6-8 · **Approach:** Pain-led, quoting the JD line back (this is the single most
 quotable signal type - the verbatim sentence is already written for you).
 
 ## 3. Funding & growth signals
@@ -72,13 +72,13 @@ quotable signal type - the verbatim sentence is already written for you).
 **Look for:** seed through C announced recently - blog, press, structured funding data.
 **Implies:** capital plus milestone pressure equals willingness to buy acceleration.
 **Score:** 6-8; top of band when the stated use of funds touches the client's area.
-**Approach:** Pain-led on the scaling challenge the raise creates.
+**Approach:** Segment fallback on the scaling challenge the raise creates.
 
 ### Expansion moves
 **Look for:** new offices or markets, product-line launches, headcount surging in a
 region or department.
 **Implies:** processes that worked at the old size are breaking.
-**Score:** 6-7 · **Approach:** Pain-led or PVP tied to the specific expansion.
+**Score:** 6-7 · **Approach:** Segment fallback or Value-led tied to the specific expansion.
 
 ## 4. Operational & review signals
 
@@ -87,14 +87,14 @@ region or department.
 client fills (slow onboarding, weak integrations, manual steps, support lag).
 **Implies:** the prospect's own customers are feeling the pain.
 **Score:** 7-9 when complaints name the problem area.
-**Approach:** PVP - "Read your recent reviews; the pattern is [X]. Here's how teams
+**Approach:** Value-led - "Read your recent reviews; the pattern is [X]. Here's how teams
 fix it."
 
 ### Public complaints or visible gaps
 **Look for:** forum threads, social posts, community chatter about their operational
 problems.
 **Implies:** pain real enough to be discussed in public.
-**Score:** 7-9 · **Approach:** PQS referencing the pattern (not the individual post).
+**Score:** 7-9 · **Approach:** Pain-led referencing the pattern (not the individual post).
 
 ### Pricing / business-model reads
 **Look for:** pricing page structure, fee models, who they monetize.
@@ -107,12 +107,12 @@ problems.
 **Look for:** blog or changelog posts about the challenge the client solves.
 **Implies:** problem-aware; possibly evaluating or building in-house.
 **Score:** 6-8, higher when recent.
-**Approach:** PVP - reference their post, add the insight it stopped short of.
+**Approach:** Value-led - reference their post, add the insight it stopped short of.
 
 ### Conference presence
 **Look for:** speaking slots or attendance at events in the client's space.
 **Implies:** investing time in the problem space; often actively evaluating.
-**Score:** 5-7 · **Approach:** PQS with the event as the hook.
+**Score:** 5-7 · **Approach:** Pain-led with the event as the hook.
 
 ## 6. Structured-data judgment (04-crustdata-signals input)
 

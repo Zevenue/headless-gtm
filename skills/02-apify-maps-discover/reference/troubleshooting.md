@@ -3,7 +3,7 @@
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | `ERROR: environment variable APIFY_API_TOKEN is not set` | token not exported | `export APIFY_API_TOKEN=...` (Apify Console → Settings → Integrations) |
-| `ModuleNotFoundError: requests` | deps not installed | `pip install -r ../_shared/requirements.txt` (use a venv) |
+| `ModuleNotFoundError: requests` | deps not installed | `pip install -r ../headless-gtm-shared/requirements.txt` (use a venv) |
 | `Apify error 401` | bad/expired token | regenerate the token; check you copied it whole |
 | `Apify error 402` / insufficient credit | account out of credit | top up, or lower `--max-results` |
 | `Apify error 429` | rate limited | wait and retry; reduce concurrency / run size |

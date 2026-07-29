@@ -20,6 +20,7 @@ Thumbs.db
 *.swp
 
 # Local runtime output from skills
+runs/
 content/linkedin/
 prospects/
 data/scans/

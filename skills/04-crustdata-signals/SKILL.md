@@ -28,7 +28,7 @@ and column contain the domains.
 ## Prerequisites
 
 - `CRUSTDATA_API_KEY` env var - get your API key from the [CrustData dashboard](https://crustdata.com)
-- Python packages: `pip install -r ../_shared/requirements.txt` (Sheets export uses the optional `gspread`/`google-auth` extras)
+- Python packages: `pip install -r ../headless-gtm-shared/requirements.txt` (Sheets export uses the optional `gspread`/`google-auth` extras)
 - Google Sheets OAuth2 token at `~/.google/token.json`
 
 ## Credit rules
@@ -80,7 +80,7 @@ python3 scripts/crustdata_signals.py \
 
 # Chain position: from an upstream records.jsonl (01/02/03) - inherits its fields
 python3 scripts/crustdata_signals.py \
-  --records ../01-prospeo-discover/runs/<run-id>/records.jsonl \
+  --records ./runs/<run-id>/records.jsonl \
   --hire-days 180
 
 # From a Google Sheet
@@ -161,12 +161,12 @@ The sheets writer auto-generates signal text:
 
 After enrichment completes, the script writes `records.jsonl` and `meta.json` to
 the run folder. Each record carries the stage-04 fields per
-`_shared/CONVENTIONS.md` - `funding[]` (rounds), `headcount_growth`,
+`headless-gtm-shared/CONVENTIONS.md` - `funding[]` (rounds), `headcount_growth`,
 `dept_growth[]`, `recent_hires[]` (capped at 25; per-domain JSONs keep the full
 list) - plus signal summaries in `filters_matched`:
 
 ```jsonl
-{"company": "Acme Robotics", "domain": "acmerobotics.com", "person": null, "funding": [{"round_type": "Series B", "money_raised_formatted": "$56M", "date": "2026-03-02"}], "headcount_growth": {"current_employee_count": 350, "employee_count_yoy_growth_rate_percentage": 42}, "dept_growth": [{"department": "Engineering", "current": 120, "six_months_ago": 95, "growth_6m_pct": 26.3}], "recent_hires": [{"name": "J. Doe", "title": "VP Sales", "start_date": "2026-05-01", "seniority": "vp"}], "filters_matched": ["Series B $56M", "350 employees", "42% YoY growth", "18 recent hires"]}
+{"company": "Serve Robotics", "domain": "serverobotics.com", "person": null, "funding": [{"round_type": "Series B", "money_raised_formatted": "$56M", "date": "2026-03-02"}], "headcount_growth": {"current_employee_count": 350, "employee_count_yoy_growth_rate_percentage": 42}, "dept_growth": [{"department": "Engineering", "current": 120, "six_months_ago": 95, "growth_6m_pct": 26.3}], "recent_hires": [{"name": "J. Doe", "title": "VP Sales", "start_date": "2026-05-01", "seniority": "vp"}], "filters_matched": ["Series B $56M", "350 employees", "42% YoY growth", "18 recent hires"]}
 ```
 
 When the run was fed an upstream `records.jsonl` (`--records`), every upstream

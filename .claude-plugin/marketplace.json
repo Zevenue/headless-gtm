@@ -1,0 +1,15 @@
+{
+  "name": "headless-gtm",
+  "description": "Zevenue's Headless GTM chain - outbound discovery-to-resolution skills for Claude Code, plus the run-first-campaign cold-start workflow.",
+  "owner": {
+    "name": "Zevenue"
+  },
+  "plugins": [
+    {
+      "name": "headless-gtm",
+      "displayName": "Headless GTM",
+      "source": "./",
+      "description": "GTM without the SaaS layer: an outbound pipeline built as agent skills. Describe an ICP in plain English and the chain takes it from company discovery to verified, signal-ranked contacts - every step on raw vendor APIs, with cost approved before any credit is spent."
+    }
+  ]
+}

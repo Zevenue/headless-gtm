@@ -16,7 +16,7 @@ One row per reply received, joined back to the signal that drove the email:
 
 ```jsonl
 {"domain": "acme.com", "signal_type": "hiring-role-replaced", "signal_score": 9,
- "approach": "PQS", "reply_class": "positive-meeting", "reply_excerpt": "...",
+ "approach": "Pain-led", "reply_class": "positive-meeting", "reply_excerpt": "...",
  "campaign": "2026-05-supply-chain", "sent_date": "2026-05-14"}
 ```
 

@@ -1,20 +1,21 @@
 """
 Prospect Posts Scraper via Apify
 Fetches recent LinkedIn posts from one or more profiles and writes structured JSON
-for theme/signal research. Read-only, multi-profile, does not download images.
+for theme/signal research. Read-only and multi-profile: it does not download
+images and does not write back to any profile.
 
 Uses the apimaestro/linkedin-profile-posts actor (ID LQQIXN9Othf8f7R5n), which takes
 one profile per run. For multiple profiles, we start runs in parallel and merge.
 
 Usage:
-    python3 utils/prospect_posts.py \\
+    python3 scripts/prospect_posts.py \\
         --profile-url https://www.linkedin.com/in/foo/ \\
         --profile-url https://www.linkedin.com/in/bar/ \\
         --count 20 \\
-        --output-path prospects/_scans/2026-04-16-ai-first-gtm.json
+        --output-path scans/2026-04-16-ai-first-gtm.json
 
 Requires:
-    - APIFY_API_TOKEN in .env
+    - APIFY_API_TOKEN in the environment or a .env file
     - pip install requests python-dotenv
 """
 
@@ -30,16 +31,26 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
-from dotenv import load_dotenv
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+# --- shared helpers + .env loading ------------------------------------------
+_SHARED = Path(__file__).resolve().parents[2] / "headless-gtm-shared"
+if _SHARED.is_dir():
+    sys.path.insert(0, str(_SHARED))
+try:
+    from common import load_env, runs_base
+except ImportError:
+    sys.exit(
+        f"ERROR: cannot find headless-gtm-shared/common.py (looked in {_SHARED}).\n"
+        "Copy skills/headless-gtm-shared/ next to this skill - the chain reads its record "
+        "contract and shared helpers from there."
+    )
+load_env(__file__)
 
 ACTOR_ID = "apimaestro~linkedin-profile-posts"
 APIFY_BASE = "https://api.apify.com/v2"
 POLL_INTERVAL_SECS = 5
 RUN_TIMEOUT_SECS = 900  # 15 min per profile
 
-load_dotenv(PROJECT_ROOT / ".env")
 API_TOKEN = os.getenv("APIFY_API_TOKEN") or os.getenv("APIFY_API_KEY")
 
 

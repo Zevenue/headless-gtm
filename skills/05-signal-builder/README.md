@@ -4,7 +4,7 @@ The judgment layer (step 05) of the API-first GTM chain. Takes scraped website
 markdown (03-firecrawl-research), structured vendor signals (04-crustdata-signals),
 or a bare URL, and emits ranked, provenance-backed outbound signals: the exact
 quotable sentence, source URL, a 1-10 score, and a recommended campaign approach
-(PQS / PVP / Pain-led) per signal.
+(Pain-led / Value-led / Segment fallback) per signal.
 
 This is the one skill in the chain with no vendor behind it - the model is the
 engine. No API key, no credits.
@@ -36,7 +36,9 @@ uses the 03-firecrawl-research skill if installed, or any plain fetch tool other
     └── signal_io.py                      collect / emit / status - batch chain I/O
 ```
 
-Evals for this skill are maintained in Zevenue's private source repo and run
-before every release - skill folders ship without them.
+Evals live outside the skill, at `_evals/05-signal-builder/` - see
+[`_evals/README.md`](../_evals/README.md) for why.
+
+Calibration target: (A) Opus-optimized (see the repo's authoring standard).
 
 Built at [Zevenue](https://zevenue.com), a GTM engineering firm.

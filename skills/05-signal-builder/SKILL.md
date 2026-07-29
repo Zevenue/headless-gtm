@@ -1,26 +1,25 @@
 ---
 name: 05-signal-builder
 description: >
-  Rank a prospect's outbound signals and pick the campaign approach (PQS / PVP /
-  Pain-led) - the judgment layer (step 05) of the API-first GTM chain. Takes
-  scraped website markdown (03-firecrawl-research), structured vendor signals
-  like funding / headcount / recent hires (04-crustdata-signals), or just a URL
-  or pasted content, and emits ranked provenance-backed signals: the exact
-  quotable sentence, source URL, 1-10 score, and recommended approach. Use
-  whenever the user wants to score, rank, or prioritize prospects or accounts,
-  decide outreach angles, or asks "which of these companies should we email
-  first", "what's the angle for this account", "rank these signals", "score
-  these prospects", "turn this scrape into campaign angles", or "run
-  signal-builder" - and whenever a records.jsonl or enrichment output is ready
-  for judgment before writing copy. Scoring and interpretation live here;
-  scraping belongs to firecrawl-research, vendor signal pulls to
+  Rank a prospect's outbound signals and pick the campaign approach (Pain-led /
+  Value-led / Segment fallback) - the judgment layer (step 05) of the API-first
+  GTM chain. Takes scraped website markdown (03-firecrawl-research), vendor
+  signals like funding / headcount / recent hires (04-crustdata-signals), or
+  just a URL or pasted content, and emits ranked provenance-backed signals: the
+  exact quotable sentence, source URL, 1-10 score, and recommended approach.
+  Use whenever the user wants to score, rank, or prioritize prospects or
+  accounts, decide outreach angles, or asks "which of these should we email
+  first", "what's the angle for this account", "rank these signals", or "turn
+  this scrape into campaign angles" - and whenever a records.jsonl or
+  enrichment output is ready for judgment before writing copy. Scoring lives
+  here; scraping belongs to firecrawl-research, vendor pulls to
   crustdata-signals, email finding to resolution.
 ---
 
 # Signal Builder - the judgment layer (05)
 
 Signal vendors sell facts ("company X raised", "company Y is hiring"). Scrapers sell
-pages. Neither tells you whether a fact is a PQS trigger, a PVP opening, or noise for
+pages. Neither tells you whether a fact is a Pain-led trigger, a Value-led opening, or noise for
 this particular client. That call - which finding matters, how much, and what to do
 with it - is this skill. It runs on model judgment alone: no API key, no credits spent.
 
@@ -161,12 +160,12 @@ those domains against the anchors before emitting more.
 
 | Approach | Use when | Email shape |
 |---|---|---|
-| **PQS** (Pain-Qualified Segment) | the signal names a specific, acute pain you can ask about | "Noticed [signal]. Teams in that spot usually deal with [pain]. Is that you?" |
-| **PVP** (Permissionless Value Prop) | you can hand over something genuinely useful tied to the signal before asking for anything | "Put together [artifact] for you - [insight]." |
-| **Pain-led** | moderate or contextual signals; every fallback | lead with the most common pain for the profile, ask if it resonates |
+| **Pain-led** | the signal names a specific, acute pain you can ask about | "Noticed [signal]. Teams in that spot usually deal with [pain]. Is that you?" |
+| **Value-led** | you can hand over something genuinely useful tied to the signal before asking for anything | "Put together [artifact] for you - [insight]." |
+| **Segment fallback** | moderate or contextual signals; every fallback | lead with the most common pain for the profile, ask if it resonates |
 
-Signals scoring 8+ usually carry PQS. Pick PVP only when a real artifact exists to
-give (an audit, a teardown, a list), not a hypothetical one. 4 and under: Pain-led.
+Signals scoring 8+ usually carry Pain-led. Pick Value-led only when a real artifact exists to
+give (an audit, a teardown, a list), not a hypothetical one. 4 and under: Segment fallback.
 
 ## Output 1 - the report
 
@@ -181,7 +180,7 @@ across prospects and runs:
 ### Signal 1: {Name} (Score: X/10)
 **Detected:** {the factual finding}
 **Implies:** {what their team is dealing with day to day}
-**Approach:** {PQS | PVP | Pain-led}
+**Approach:** {Pain-led | Value-led | Segment fallback}
 **Angle:** {one sentence - the core message this signal enables}
 **Source:** {url or vendor ref} - "{the quotable sentence}"
 **Data points for copy:** {variable}: {value} · {variable}: {value}
@@ -190,7 +189,7 @@ across prospects and runs:
 
 ### Fallback (Score: X/10)
 **Assumption:** {most common pain for this profile}
-**Approach:** Pain-led
+**Approach:** Segment fallback
 **Angle:** {one sentence}
 ```
 
@@ -212,10 +211,10 @@ untouched.
    {"signal_type": "hiring-role-replaced",
     "signal_sentence": "You'll own supplier escalations across email, WhatsApp and phone.",
     "source_url": "https://acme.com/careers",
-    "score": 9, "approach": "PQS",
+    "score": 9, "approach": "Pain-led",
     "evidence_date": "2026-07", "notes": "2 open Supply Chain Coordinator roles"}
  ],
- "fallback_approach": {"approach": "Pain-led",
+ "fallback_approach": {"approach": "Segment fallback",
                        "angle": "Mid-market distributors usually drown in manual PO chasing"}}
 ```
 
@@ -224,7 +223,7 @@ Field rules (emit enforces them):
 - `signal_type` - kebab-case; use the catalog's type name where one fits, free-form otherwise
 - `signal_sentence` - the referenceable evidence: verbatim quote for web signals, faithful fact statement for structured signals
 - `source_url` - `http(s)://` page URL, or `vendor:section:domain` for structured signals
-- `score` - integer 1-10 · `approach` - `PQS` | `PVP` | `Pain-led`
+- `score` - integer 1-10 · `approach` - `Pain-led` | `Value-led` | `Segment fallback`
 - signals sorted by score descending, max 5; `evidence_date` and `notes` optional
 - `fallback_approach` - always present: `{approach, angle}`
 
@@ -236,7 +235,7 @@ Field rules (emit enforces them):
 - **Generic signals.** "They're growing" is not a signal. "Posted 3 Supply Chain
   Coordinator roles in the last 30 days" is.
 - **Inflated scores.** A 4/10 batch is useful information - it tells the client this
-  segment needs a Pain-led catch-all, not personalization theater.
+  segment needs a Segment fallback catch-all, not personalization theater.
 - **Invented sources.** Never cite a URL you didn't see in the bundle or fetch. If
   coverage was thin, say which pages were missing instead.
 - **Editing upstream fields.** The record is additive; you add `signals` and

@@ -120,7 +120,7 @@ with `pass: 2`; rows move between output files to match their new verdict.
   `QUALIFY_LLM_BASE_URL`, `QUALIFY_LLM_API_KEY`, `QUALIFY_LLM_MODEL`. Missing
   configuration → in-session, silently.
 - **Acceptance check:** a newly configured model must first pass the chain's
-  held-out evaluation set before judging a real list, and its
+  evaluation set (`_evals/01-icp-qualify/`) before judging a real list, and its
   false-disqualification rate is the number to watch - that's the expensive
   mistake. A model that fails falls back to in-session judgment.
 - External judgments return structured JSON matching the record contract;
@@ -139,7 +139,7 @@ with `pass: 2`; rows move between output files to match their new verdict.
 
 ## Output contract
 
-Three files per run, under `runs/<run-id>/` per `_shared/CONVENTIONS.md`:
+Three files per run, under `runs/<run-id>/` per `headless-gtm-shared/CONVENTIONS.md`:
 
 - **`records.jsonl`** - what flows downstream: all `qualified` rows, plus
   `uncertain` rows **only if the user opts them in** (see the gate below).

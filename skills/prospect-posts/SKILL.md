@@ -50,7 +50,7 @@ If either profile URL or theme is missing, ask the user before running.
 Run the scraper. Repeat `--profile-url` for each profile:
 
 ```bash
-python3 utils/prospect_posts.py \
+python3 scripts/prospect_posts.py \
   --profile-url "<url-or-username-1>" \
   --profile-url "<url-or-username-2>" \
   --count 20 \
@@ -146,8 +146,8 @@ Do not paste the full report into chat. The user will open the file.
 | Issue | Fix |
 |---|---|
 | `APIFY_API_TOKEN not found` | Add to `.env` |
-| Actor run times out | Increase `timeout_secs` in `utils/prospect_posts.py` or reduce `--count` |
+| Actor run times out | Increase `timeout_secs` in `scripts/prospect_posts.py` or reduce `--count` |
 | Profile returned 0 posts with status `SUCCEEDED` | Profile may be private, have no public posts, or the username was wrong. Verify the URL in a browser |
 | A run shows `FAILED` / `TIMED-OUT` | Re-run just that profile. Apify actor can be flaky on specific profiles; a retry usually works |
 | Zero matches but you expect some | Widen the theme interpretation, or check the no-match summary - the prospect may frame the topic differently than the user's phrasing |
-| Schema changed / missing text | Inspect raw output with `--raw-output /tmp/raw.json` and update field names in `extract_text()` / `extract_author()` in `utils/prospect_posts.py` |
+| Schema changed / missing text | Inspect raw output with `--raw-output /tmp/raw.json` and update field names in `extract_text()` / `extract_author()` in `scripts/prospect_posts.py` |

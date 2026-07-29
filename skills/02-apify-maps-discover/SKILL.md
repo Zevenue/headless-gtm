@@ -2,7 +2,7 @@
 name: 02-apify-maps-discover
 description: >-
   Find local-business (SMB) prospects via Google Maps using the Apify Compass
-  actor. Use for step-02 vertical discovery when the ICP is
+  actor. Use for Zevenue Step-2 Discovery (Vertical) when the ICP is
   Maps-addressable - laundromats, salons, HVAC, yoga studios, gyms, clinics -
   and you need a normalized list of name, domain, address, phone, rating, and
   review count ready for enrichment. Estimates cost and prompts before any run
@@ -28,7 +28,7 @@ enrichment. Output is the normalized Zevenue ProspectRecord schema (JSON + CSV).
    `placeMinimumStars`). Add enrichment only when asked (see flags).
 4. **Normalize.** Each raw place is mapped to the shared 15-field ProspectRecord
    so it's comparable with the Outscraper / Google Places skills.
-5. **Write the run folder.** Writes `runs/<run-id>/` per `_shared/CONVENTIONS.md`:
+5. **Write the run folder.** Writes `runs/<run-id>/` per `headless-gtm-shared/CONVENTIONS.md`:
    `records.jsonl` (the shared chain format 03+ consume - `company`, `domain`,
    `person`, plus the firmographic fields), `tracker.json`, `meta.json` (count +
    spend estimate), `prospects.json` (all 15 ProspectRecord fields), and
@@ -38,7 +38,7 @@ enrichment. Output is the normalized Zevenue ProspectRecord schema (JSON + CSV).
 ## Usage
 ```bash
 # install deps once (use a venv - system Python is externally-managed)
-pip install -r ../_shared/requirements.txt
+pip install -r ../headless-gtm-shared/requirements.txt
 export APIFY_API_TOKEN=...        # console.apify.com → Settings → Integrations
 
 python discover.py \
@@ -65,7 +65,7 @@ python discover.py \
 ### Output (normalized ProspectRecord)
 `name, domain, website, phone, full_address, city, region, rating,
 reviews_count, latitude, longitude, place_id, category, last_review_date,
-source` → see [../_shared/schema.py](../_shared/schema.py).
+source` → see [../headless-gtm-shared/schema.py](../headless-gtm-shared/schema.py).
 
 ## Cost
 | Mode | Flags | Est. price |

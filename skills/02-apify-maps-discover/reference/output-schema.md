@@ -1,7 +1,7 @@
 # Reference · Output schema (normalized ProspectRecord)
 
 Every tool in the Step-2 stack normalizes to this one record so outputs are
-comparable and dedup-able. Defined in [`../../_shared/schema.py`](../../_shared/schema.py).
+comparable and dedup-able. Defined in [`../../headless-gtm-shared/schema.py`](../../headless-gtm-shared/schema.py).
 
 ## The 15 fields
 | Field | Type | Source (Compass) | Notes |

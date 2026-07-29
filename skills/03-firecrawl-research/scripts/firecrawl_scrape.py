@@ -8,10 +8,11 @@ Credit-efficient approach:
   3. scrape (1 credit each) — only scrape confirmed URLs
 
 Modes:
-  standard  — Tier 1 + Tier 2 pages (5-8 credits)
-  deep      — Tier 1 + Tier 2 + Tier 3 pages (5-11 credits)
-  minimal   — Homepage + About only (3 credits)
-  extract   — Firecrawl /extract with schema (1 credit)
+  standard  - Tier 1 + Tier 2 pages (5-8 credits)
+  deep      - Tier 1 + Tier 2 + Tier 3 pages (5-11 credits)
+  minimal   - Homepage + About only (3 credits)
+  extract   - Firecrawl /extract with schema (token-billed: 1 credit = 15
+              tokens, so cost scales with page size - never assume 1 credit)
 
 Storage:
   All data is saved to a run folder on disk. Each domain gets its own JSON file.
@@ -24,8 +25,12 @@ Usage:
   # Batch from file (one domain per line)
   python3 firecrawl_scrape.py --batch domains.txt --mode standard
 
-  # Batch from JSON list
-  python3 firecrawl_scrape.py --batch domains.json --mode minimal
+  # Directory / registry extraction: one listing URL -> N company records
+  python3 firecrawl_scrape.py --domain "https://registry.example.com/search?page=1" \
+      --mode extract --schema listing
+
+  # Paginated registry: one listing-page URL per line
+  python3 firecrawl_scrape.py --batch pages.txt --mode extract --schema listing
 
   # Resume interrupted batch
   python3 firecrawl_scrape.py --resume /path/to/run-folder
@@ -35,6 +40,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import sys
@@ -43,11 +49,20 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
 
+# --- shared helpers + .env loading ------------------------------------------
+_SHARED = Path(__file__).resolve().parents[2] / "headless-gtm-shared"
+if _SHARED.is_dir():
+    sys.path.insert(0, str(_SHARED))
 try:
-    from dotenv import load_dotenv
-    load_dotenv()
+    from common import load_env, runs_base
+    from schema import dedup_key, domain_from_url
 except ImportError:
-    pass
+    sys.exit(
+        f"ERROR: cannot find headless-gtm-shared/common.py (looked in {_SHARED}).\n"
+        "Copy skills/headless-gtm-shared/ next to this skill - the chain reads its record "
+        "contract and shared helpers from there."
+    )
+load_env(__file__)
 
 try:
     from firecrawl import FirecrawlApp
@@ -158,8 +173,47 @@ DEFAULT_EXTRACT_SCHEMA = {
     },
 }
 
-# Default run folder base — resolve relative to this skill dir (scripts/ -> skill -> runs/)
-RUN_FOLDER_BASE = Path(__file__).resolve().parent.parent / "runs"
+DEFAULT_EXTRACT_PROMPT = (
+    "Extract GTM-relevant company information from this website. "
+    "Look for logo grids, trusted-by sections, partner sections, "
+    "and funding/investor sections to find company names."
+)
+
+# Directory / registry extraction: one listing URL in, N company rows out.
+# Selected with --schema listing. A row without a website is normal - it enters
+# the chain with domain "" and dedups on name|city (schema.py:dedup_key).
+LISTING_EXTRACT_PROMPT = (
+    "This page is a directory, registry, or association listing of businesses. "
+    "Extract every listed business row on the page - do not summarize or pick "
+    "examples. A row without a website is still a row; leave a field empty "
+    "when the listing does not show it."
+)
+
+LISTING_EXTRACT_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "companies": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string", "description": "Business name as listed"},
+                    "website": {"type": "string", "description": "Website URL; empty when the listing shows none"},
+                    "phone": {"type": "string", "description": "Phone number as listed; empty when not shown"},
+                    "location": {"type": "string", "description": "City / region as listed"},
+                    "category": {"type": "string", "description": "The listing's own classification"},
+                    "listing_url": {"type": "string", "description": "The row's detail-page URL, if any"},
+                    "registry_id": {"type": "string", "description": "Licence / registration number, if shown"},
+                },
+                "required": ["name"],
+            },
+        },
+    },
+    "required": ["companies"],
+}
+
+# Default run folder base: ./runs under the current working directory.
+RUN_FOLDER_BASE = Path(runs_base(__file__))
 
 
 # ---------------------------------------------------------------------------
@@ -169,14 +223,16 @@ RUN_FOLDER_BASE = Path(__file__).resolve().parent.parent / "runs"
 def create_run_folder(mode: str, domain_count: int) -> Path:
     """Create a timestamped run folder and return its path."""
     timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-    name = f"{timestamp}_{mode}_{domain_count}domains"
+    name = f"{timestamp}_03-firecrawl_{mode}_{domain_count}domains"
     run_dir = RUN_FOLDER_BASE / name
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "scans").mkdir(exist_ok=True)
     return run_dir
 
 
-def init_tracker(run_dir: Path, domains: list[str], mode: str) -> dict:
+def init_tracker(run_dir: Path, domains: list[str], mode: str,
+                 schema: dict | None = None,
+                 extract_prompt: str | None = None) -> dict:
     """Create or load tracker.json for the run."""
     tracker_path = run_dir / "tracker.json"
     if tracker_path.exists():
@@ -193,6 +249,11 @@ def init_tracker(run_dir: Path, domains: list[str], mode: str) -> dict:
         "total_credits": 0,
         "domains": {d: {"status": "pending"} for d in domains},
     }
+    # Persisted so --resume re-runs extract with the same schema/prompt.
+    if schema is not None:
+        tracker["extract_schema"] = schema
+    if extract_prompt is not None:
+        tracker["extract_prompt"] = extract_prompt
     tracker_path.write_text(json.dumps(tracker, indent=2))
     return tracker
 
@@ -362,17 +423,42 @@ def scrape_pages(app: FirecrawlApp, url_map: dict[str, str]) -> tuple[list[dict]
     return results, total_scrape_credits
 
 
-def run_extract(app: FirecrawlApp, url: str, schema: dict | None = None) -> dict:
+def _extract_usage(result) -> tuple[int | None, int | None]:
+    """Best-effort (tokens, credits) from an /extract response.
+
+    /extract bills by tokens (1 credit = 15 tokens), not per call - so a
+    response that omits usage means the cost is UNKNOWN, never "1 credit".
+    """
+    def get(obj, *names):
+        for n in names:
+            if obj is None:
+                return None
+            if isinstance(obj, dict) and obj.get(n) is not None:
+                return obj[n]
+            if hasattr(obj, n) and getattr(obj, n) is not None:
+                return getattr(obj, n)
+        return None
+
+    tokens = get(result, "tokens_used", "tokensUsed")
+    credits = get(result, "credits_used", "creditsUsed")
+    meta = get(result, "metadata")
+    if tokens is None:
+        tokens = get(meta, "tokens_used", "tokensUsed")
+    if credits is None:
+        credits = get(meta, "credits_used", "creditsUsed")
+    if credits is None and tokens is not None:
+        credits = math.ceil(int(tokens) / 15)
+    return tokens, credits
+
+
+def run_extract(app: FirecrawlApp, url: str, schema: dict | None = None,
+                prompt: str | None = None) -> dict:
     if schema is None:
         schema = DEFAULT_EXTRACT_SCHEMA
+    if prompt is None:
+        prompt = DEFAULT_EXTRACT_PROMPT
     try:
-        result = app.extract(
-            [url],
-            prompt="Extract GTM-relevant company information from this website. "
-                   "Look for logo grids, trusted-by sections, partner sections, "
-                   "and funding/investor sections to find company names.",
-            schema=schema,
-        )
+        result = app.extract([url], prompt=prompt, schema=schema)
         # Extract data from response object
         if hasattr(result, "data"):
             extracted = result.data
@@ -380,14 +466,23 @@ def run_extract(app: FirecrawlApp, url: str, schema: dict | None = None) -> dict
             extracted = result
         else:
             extracted = {}
-        return {"url": url, "status": "success", "extracted": extracted, "credits_used": 1}
+        tokens, credits = _extract_usage(result)
+        if credits is None:
+            print("  ! extract usage not reported by the API - /extract bills by "
+                  "tokens (1 credit = 15 tokens); check the Firecrawl dashboard "
+                  "for the actual charge before scaling up", file=sys.stderr)
+        return {"url": url, "status": "success", "extracted": extracted,
+                "tokens_used": tokens,
+                "credits_used": credits if credits is not None else 0}
     except Exception as e:
-        return {"url": url, "status": "failed", "error": str(e), "credits_used": 1}
+        return {"url": url, "status": "failed", "error": str(e),
+                "tokens_used": None, "credits_used": 0}
 
 
 def scrape_domain(domain: str, mode: str = "standard",
                   schema: dict | None = None,
-                  map_limit: int = 200) -> dict:
+                  map_limit: int = 200,
+                  extract_prompt: str | None = None) -> dict:
     """Scrape a single domain and return a research packet."""
     if FirecrawlApp is None:
         print("ERROR: firecrawl-py not installed. Run: pip install firecrawl-py")
@@ -412,13 +507,18 @@ def scrape_domain(domain: str, mode: str = "standard",
 
     # Extract-only mode
     if mode == "extract":
-        result = run_extract(app, base, schema)
+        result = run_extract(app, base, schema, prompt=extract_prompt)
+        credits = result.get("credits_used", 0)
+        shown = credits if credits else "unknown (token-billed)"
+        print(f"  extract: {result['status']} | credits: {shown}")
         return {
-            "domain": clean_domain, "mode": "extract", "timestamp": timestamp,
+            "domain": clean_domain, "url": base, "mode": "extract",
+            "timestamp": timestamp,
             "site_map": {"total_urls_found": 0, "pages_matched": 0,
                          "pages_scraped": 0, "pages_failed": 0},
             "pages": {}, "extract": result.get("extracted", {}),
-            "credits_used": 1, "status": result["status"],
+            "tokens_used": result.get("tokens_used"),
+            "credits_used": credits, "status": result["status"],
         }
 
     # Step 1: Map (1 credit)
@@ -493,7 +593,9 @@ def scrape_domain(domain: str, mode: str = "standard",
 
 def run_batch(domains: list[str], mode: str, run_dir: Path | None = None,
               map_limit: int = 200, delay: float = 2.0,
-              upstream: dict | None = None) -> Path:
+              upstream: dict | None = None,
+              schema: dict | None = None,
+              extract_prompt: str | None = None) -> Path:
     """
     Run extraction on a list of domains with progress tracking.
     Returns path to the run folder.
@@ -512,7 +614,11 @@ def run_batch(domains: list[str], mode: str, run_dir: Path | None = None,
             for rec in upstream.values():
                 f.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
-    tracker = init_tracker(run_dir, domains, mode)
+    tracker = init_tracker(run_dir, domains, mode,
+                           schema=schema, extract_prompt=extract_prompt)
+    # A resumed run re-reads the schema/prompt it started with.
+    schema = schema or tracker.get("extract_schema")
+    extract_prompt = extract_prompt or tracker.get("extract_prompt")
     pending = get_pending_domains(tracker)
 
     print(f"\n{'='*60}")
@@ -529,7 +635,9 @@ def run_batch(domains: list[str], mode: str, run_dir: Path | None = None,
         print(f"\n[{idx}/{len(domains)}] {domain}")
 
         try:
-            result = scrape_domain(domain, mode=mode, map_limit=map_limit)
+            result = scrape_domain(domain, mode=mode, schema=schema,
+                                   map_limit=map_limit,
+                                   extract_prompt=extract_prompt)
 
             # Save domain JSON to scans folder
             safe_name = domain.replace("/", "_").replace(":", "")
@@ -582,18 +690,66 @@ def load_upstream_records(run_dir: Path) -> dict:
     return out
 
 
+def _listing_records(scan: dict) -> list[dict] | None:
+    """Flatten a directory/registry extract scan into per-row chain records.
+
+    Returns None when the scan is not a listing extraction (no `companies` key
+    in the extract payload); returns [] for a listing page with zero rows.
+    Rows without websites are kept with domain "" - they dedup on name|city
+    per headless-gtm-shared/schema.py:dedup_key.
+    """
+    extracted = scan.get("extract")
+    if not isinstance(extracted, dict) or "companies" not in extracted:
+        return None
+    companies = extracted.get("companies")
+    if not isinstance(companies, list):
+        return []
+    page_url = scan.get("url") or ""
+    out = []
+    for row in companies:
+        if not isinstance(row, dict):
+            continue
+        name = (row.get("name") or "").strip()
+        if not name:
+            continue
+        website = (row.get("website") or "").strip()
+        location = (row.get("location") or "").strip()
+        parts = [p.strip() for p in location.split(",") if p.strip()]
+        out.append({
+            "company": name,
+            "domain": domain_from_url(website),
+            "person": None,
+            "website": website,
+            "phone": (row.get("phone") or "").strip(),
+            "city": parts[0] if parts else "",
+            "region": parts[1] if len(parts) > 1 else "",
+            "category": (row.get("category") or "").strip(),
+            "listing_url": (row.get("listing_url") or "").strip(),
+            "registry_id": (row.get("registry_id") or "").strip(),
+            "source_url": page_url,
+        })
+    return out
+
+
 def write_records_jsonl(run_dir: Path, tracker: dict):
     """Write shared-format records.jsonl for downstream skills.
 
-    Per _shared/CONVENTIONS.md stage 03 adds: scraped_markdown (by page type,
-    capped at RECORD_CONTENT_CAP chars/page — scans/*.json keep the full text),
-    pages_scraped, scrape_status. Upstream fields are inherited, never
-    overwritten; filters_matched unions upstream labels with has_<page> labels.
+    Scrape modes: per CONVENTIONS.md stage 03, each domain's record adds
+    scraped_markdown (by page type, capped at RECORD_CONTENT_CAP chars/page -
+    scans/*.json keep the full text), pages_scraped, scrape_status. Upstream
+    fields are inherited, never overwritten; filters_matched unions upstream
+    labels with has_<page> labels.
+
+    Listing extraction (--mode extract --schema listing): one record per
+    extracted directory row instead - company, domain (may be ""), website,
+    phone, city/region, category, listing_url, registry_id, source_url -
+    deduped across listing pages on domain, else name|city.
     """
     scans_dir = run_dir / "scans"
     jsonl_path = run_dir / "records.jsonl"
     upstream = load_upstream_records(run_dir)
     count = 0
+    seen_listing_keys: set[str] = set()
 
     with open(jsonl_path, "w") as f:
         for domain, info in tracker["domains"].items():
@@ -602,19 +758,34 @@ def write_records_jsonl(run_dir: Path, tracker: dict):
 
             safe_name = domain.replace("/", "_").replace(":", "")
             scan_path = scans_dir / f"{safe_name}.json"
+            scan = json.loads(scan_path.read_text()) if scan_path.exists() else {}
+
+            # Directory/registry extraction: emit the extracted rows, not a
+            # record for the listing site itself.
+            listing = _listing_records(scan)
+            if listing is not None:
+                for record in listing:
+                    key = dedup_key({"domain": record["domain"],
+                                     "name": record["company"],
+                                     "city": record["city"]})
+                    if key and key in seen_listing_keys:
+                        continue
+                    if key:
+                        seen_listing_keys.add(key)
+                    f.write(json.dumps(record, ensure_ascii=False) + "\n")
+                    count += 1
+                continue
+
             scraped_markdown = {}
             pages_found = []
-            scrape_status = info.get("status", "")
-            if scan_path.exists():
-                scan = json.loads(scan_path.read_text())
-                scrape_status = scan.get("status", scrape_status)
-                for ptype, page in (scan.get("pages") or {}).items():
-                    if not isinstance(page, dict):
-                        continue
-                    pages_found.append(f"has_{ptype}")
-                    content = page.get("content") or ""
-                    if content.strip():
-                        scraped_markdown[ptype] = content[:RECORD_CONTENT_CAP]
+            scrape_status = scan.get("status", info.get("status", ""))
+            for ptype, page in (scan.get("pages") or {}).items():
+                if not isinstance(page, dict):
+                    continue
+                pages_found.append(f"has_{ptype}")
+                content = page.get("content") or ""
+                if content.strip():
+                    scraped_markdown[ptype] = content[:RECORD_CONTENT_CAP]
 
             record = dict(upstream.get(domain.lower(), {}))
             record.setdefault("company", domain)
@@ -633,7 +804,7 @@ def write_records_jsonl(run_dir: Path, tracker: dict):
 
 
 def write_meta(run_dir: Path, tracker: dict):
-    """Write meta.json per _shared/CONVENTIONS.md (run metadata + deviation log)."""
+    """Write meta.json per headless-gtm-shared/CONVENTIONS.md (run metadata + deviation log)."""
     meta_path = run_dir / "meta.json"
     existing = {}
     if meta_path.exists():
@@ -708,11 +879,32 @@ def main():
     parser.add_argument("--mode", default="standard",
                         choices=["standard", "deep", "minimal", "extract"],
                         help="Scan mode (default: standard)")
+    parser.add_argument("--schema", default=None, metavar="listing|FILE",
+                        help="extract mode only: 'listing' for the built-in "
+                             "directory/registry row schema (one record per "
+                             "listed business), or a path to a JSON schema file")
     parser.add_argument("--map-limit", type=int, default=200,
                         help="Max URLs to discover per domain (default: 200)")
     parser.add_argument("--delay", type=float, default=2.0,
                         help="Seconds between domains in batch mode (default: 2)")
     args = parser.parse_args()
+
+    schema, extract_prompt = None, None
+    if args.schema:
+        if args.mode != "extract":
+            sys.exit("ERROR: --schema only applies to --mode extract")
+        if args.schema.lower() == "listing":
+            schema = LISTING_EXTRACT_SCHEMA
+            extract_prompt = LISTING_EXTRACT_PROMPT
+        else:
+            schema_path = Path(args.schema)
+            if not schema_path.is_file():
+                sys.exit(f"ERROR: schema file not found: {schema_path}")
+            schema = json.loads(schema_path.read_text())
+            # A custom schema with a top-level companies array is still a
+            # listing extraction - use the listing prompt so rows aren't summarized.
+            if isinstance(schema, dict) and "companies" in (schema.get("properties") or {}):
+                extract_prompt = LISTING_EXTRACT_PROMPT
 
     if args.resume:
         # Resume an existing run
@@ -735,7 +927,8 @@ def main():
             print("ERROR: No domains found in file")
             sys.exit(1)
         run_dir = run_batch(domains, args.mode, map_limit=args.map_limit,
-                            delay=args.delay, upstream=upstream)
+                            delay=args.delay, upstream=upstream,
+                            schema=schema, extract_prompt=extract_prompt)
         print(f"\nTo write results to Google Sheet, run:")
         print(f"  python3 scripts/sheets_writer.py \\")
         print(f"    --run-dir {run_dir} \\")
@@ -744,7 +937,8 @@ def main():
 
     # Single domain — same run-folder contract as a batch of one
     run_dir = run_batch([args.domain], args.mode, map_limit=args.map_limit,
-                        delay=args.delay)
+                        delay=args.delay,
+                        schema=schema, extract_prompt=extract_prompt)
     print(f"\nRun folder: {run_dir}")
     print(f"\nTo write to Google Sheet:")
     print(f"  python3 scripts/sheets_writer.py \\")

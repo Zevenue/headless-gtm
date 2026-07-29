@@ -1,7 +1,7 @@
 # Copy Variable Design Playbook
 
 ## Purpose
-When writing outbound email copy for a campaign, identify where hardcoded language should be replaced with dynamic variables to improve relevance across segments - and where it should stay hardcoded for readability.
+When writing outbound email copy for a client campaign, identify where hardcoded language should be replaced with dynamic variables to improve relevance across segments - and where it should stay hardcoded for readability.
 
 ## When to use
 - Drafting or reviewing cold email copy that will be sent to multiple segments (different titles, industries, pain points)

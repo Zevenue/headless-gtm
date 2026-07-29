@@ -5,9 +5,9 @@ Actor: compass~crawler-google-places
 Docs:  https://apify.com/compass/crawler-google-places/api
 Auth:  APIFY_API_TOKEN  (Apify Console → Settings → Integrations → API token)
 
-Writes a chain run folder runs/<run-id>/ per ../_shared/CONVENTIONS.md:
+Writes a chain run folder runs/<run-id>/ per ../headless-gtm-shared/CONVENTIONS.md:
 records.jsonl (the shared format 03+ consume) + tracker.json + meta.json,
-plus prospects.json (full 15-field ProspectRecords, see ../_shared/schema.py)
+plus prospects.json (full 15-field ProspectRecords, see ../headless-gtm-shared/schema.py)
 and a records.csv human export.
 """
 
@@ -18,9 +18,22 @@ import json
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "_shared"))
-import common  # noqa: E402
-from schema import make_record, write_csv, write_json  # noqa: E402
+_SHARED = os.path.normpath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "headless-gtm-shared")
+)
+if os.path.isdir(_SHARED):
+    sys.path.insert(0, _SHARED)
+try:
+    import common  # noqa: E402
+    from schema import make_record, write_csv, write_json  # noqa: E402
+except ImportError:
+    sys.exit(
+        f"ERROR: cannot find headless-gtm-shared/common.py (looked in {_SHARED}).\n"
+        "Copy skills/headless-gtm-shared/ next to this skill - the chain reads its record "
+        "contract and shared helpers from there."
+    )
+
+common.load_env(__file__)
 
 SOURCE = "apify"
 ACTOR_ID = "compass~crawler-google-places"
@@ -98,7 +111,7 @@ def adapt(item: dict):
 
 
 # Firmographic fields this skill contributes to the chain's records.jsonl
-# (see ../_shared/CONVENTIONS.md). The chain keys on `domain` and reads `company`.
+# (see ../headless-gtm-shared/CONVENTIONS.md). The chain keys on `domain` and reads `company`.
 CHAIN_FIELDS = ("phone", "full_address", "city", "region",
                 "rating", "reviews_count", "place_id", "category")
 
@@ -123,7 +136,7 @@ def write_records_jsonl(records: list[dict], path: str) -> None:
 
 
 def write_run_folder(records: list[dict], run_dir: str, slug: str, meta: dict) -> None:
-    """Write the chain run folder per ../_shared/CONVENTIONS.md:
+    """Write the chain run folder per ../headless-gtm-shared/CONVENTIONS.md:
     records.jsonl + tracker.json + meta.json, plus the full-fidelity
     prospects.json (all 15 ProspectRecord fields) and records.csv human export.
 
@@ -191,7 +204,7 @@ def main() -> None:
     records = [adapt(it) for it in items]
 
     out_dir = common.resolve_out_dir(args.out, __file__)
-    slug = common.slugify(SOURCE, args.search_term, args.geo)
+    slug = common.slugify("02-apify", args.search_term, args.geo)
     run_dir = os.path.join(out_dir, slug)
     write_run_folder(records, run_dir, slug, {
         "source": SOURCE,

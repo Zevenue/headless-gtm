@@ -52,6 +52,7 @@ is missing:
 
 | Already in hand | Enter at | Why |
 |---|---|---|
+| Nothing yet - no list, no CRM, first campaign ever | run-first-campaign | The packaged cold-start workflow: context, a confirmed source of record, gate, rank, drafts, sheet - one owner approval between steps |
 | Nothing but an ICP description | 01-prospeo-discover, 02, or 04-theirstack discover (by shape) | The list has to exist first |
 | Example companies to find more of | 01-prospeo-lookalike | The list is seeds to expand, not targets to enrich |
 | Target domains, no evidence | 01-icp-qualify, then 03/04 on survivors | The gate is free; evidence spend goes only to companies that could buy |
@@ -66,7 +67,7 @@ seeds; a conference export or a purchased list is targets. The tell is in how th
 frames it ("find more like these" vs "here's who we want to reach"); when it's unclear, ask,
 because scraping a seed list researches customers the client already has.
 
-Records are additive down the chain (see `_shared/CONVENTIONS.md`): every step keeps the
+Records are additive down the chain (see `headless-gtm-shared/CONVENTIONS.md`): every step keeps the
 upstream fields and adds its own, keyed by normalized `domain`. Entering mid-chain never
 requires reformatting what the user already has - only filling what's absent.
 
@@ -169,10 +170,15 @@ The non-obvious calls:
   enriching anything else, and only carry forward companies that pass. The theirstack
   sizing count costs ~1 credit against a domain list (free without one) - it almost
   always goes first.
-- **web-scattered starts from source URLs, not queries.** Ask the user for the directories
-  or listing sites; don't guess them. The extract schema should capture whatever the
-  listing exposes (name, site, location, category) so the record enters the chain with
-  fields already filled.
+- **web-scattered starts from a proposed source of record, not a question.** Propose the
+  2-3 places these companies are already listed - a licensing registry, a professional
+  college, a trade association directory, a marketplace - with Maps (02) as the general
+  fallback, and confirm the source with the user before extracting anything. Don't open
+  by asking the user to supply URLs: proposing the source is the plan's judgment call,
+  confirming it is the user's. The extract schema captures whatever the listing exposes
+  (name, site if any, location, category, registry id) so the record enters the chain
+  with fields already filled; rows without websites ride the `name|city` dedup key and
+  stay in play.
 - **Judge before you resolve - by default.** Judgment (05) decides which accounts deserve
   per-contact resolution spend, and the signal work is what makes the email worth sending.
   The defensible inversion - resolve first, enrich only the emailable set - wins when the
@@ -269,3 +275,18 @@ records. 01-icp-qualify gates the extracted list - directory listings are the no
 discovery source (dead shops, distributors, hobby pages), so the free gate earns the most
 here. 04-crustdata adds nothing (not DB-tracked), so the qualified set goes straight to a
 full 03 scrape of each shop's own site, then 05 and 06 as usual.
+
+**"Provincially licensed HVAC contractors, no list yet" (web-scattered, cold start).**
+The owner has a business and nothing else - no CRM, no list, no outbound history. That
+starting point is run-first-campaign's, not a hand-built chain: the workflow proposes the
+source of record (the provincial trade-licensing registry, a contractor-association
+directory, a permit database) and confirms one with the owner before any spend. 03's
+"Directory and registry extraction" turns the confirmed registry into records - name, city,
+phone, licence id, and website where the row lists one. Extraction is token-billed (1
+credit = 15 tokens), so the play is: extract page 1, read the actual charge, and price the
+remaining 11 pages off that figure before running them. Rows with no website ride the
+`name|city` dedup key and
+stay rankable on listing fields alone. 01-icp-qualify gates hard (a licence roll carries the
+inactive, the retired, the out-of-area), 05 ranks with vertical-smb, email-writer drafts,
+07-campaign-sheet exports the owner sheet plus a HubSpot-shaped CSV. The registry is the
+entire discovery layer - no 04, since owner-operated trades aren't database-tracked.

@@ -60,7 +60,7 @@ prospeo-discover/
     └── sheets_export.py          paginated fetch -> runs/<run-id>/ (Sheets opt-in)
 ```
 
-Evals for this skill are maintained in Zevenue's private source repo and run
-before every release - skill folders ship without them.
+Evals live outside the skill, at `_evals/01-prospeo-discover/` - see
+[`_evals/README.md`](../_evals/README.md) for why.
 
 Built at [Zevenue](https://zevenue.com), a GTM engineering firm.

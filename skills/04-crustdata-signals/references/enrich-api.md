@@ -28,7 +28,7 @@ One identifier type per request. Multiple values of the same type supported.
 
 ```json
 {
-  "domains": ["acmerobotics.com", "globex.com"],
+  "domains": ["serverobotics.com", "prenosis.com"],
   "fields": [
     "basic_info", "headcount", "funding", "hiring", "revenue",
     "locations", "taxonomy", "followers", "people", "web_traffic",
@@ -42,10 +42,10 @@ One identifier type per request. Multiple values of the same type supported.
 
 | Parameter | Type | Example |
 |---|---|---|
-| `domains` | string[] | `["acmerobotics.com"]` |
-| `names` | string[] | `["Acme Robotics"]` |
+| `domains` | string[] | `["serverobotics.com"]` |
+| `names` | string[] | `["Serve Robotics"]` |
 | `crustdata_company_ids` | int[] | `[628895]` |
-| `professional_network_profile_urls` | string[] | `["https://linkedin.com/company/acmerobotics"]` |
+| `professional_network_profile_urls` | string[] | `["https://linkedin.com/company/serverobotics"]` |
 
 ### Optional parameters
 
@@ -59,7 +59,7 @@ One identifier type per request. Multiple values of the same type supported.
 ```json
 [
   {
-    "matched_on": "acmerobotics.com",
+    "matched_on": "serverobotics.com",
     "match_type": "domain",
     "matches": [
       {

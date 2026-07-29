@@ -17,6 +17,7 @@ confirmations, it just makes the total visible before step one.
 | 01 | icp-qualify | $0 API - in-session model judgment (optional external engine bills your own LLM tokens) | n/a | The free gate between discovery and every paid step. Its effect on the estimate: every line below it prices on post-qualify volume. Description-less rows get a plain-HTTP homepage title/meta fetch - also free. |
 | 02 | apify-maps-discover | ~$2.10 / 1K places; +$2.00 / 1K with `--include-emails` | 300s sync cap per call | Script hard-gates any run estimated over $10. Actor page has shown ~$1.50/1K; the script budgets the conservative figure. |
 | 03 | firecrawl-research | minimal 3 · standard 5-8 · deep 5-11 · extract ~20+ credits per domain | plan-dependent | $0.001/credit (Standard plan) or $0.0004 (Growth). Stealth proxy silently charges 5 credits/page on blocked sites - budget batches assuming some 5x pages. |
+| 03 | firecrawl-research (registry) | /extract is token-billed: 1 credit = 15 tokens, so cost scales with page size - no flat per-page number (extract mode on a directory, not a company site) | plan-dependent | Pilot page 1, read the actual charge, multiply by page count. Rows without websites still count. This is discovery, not enrichment - the source replaces an 01/02 pull, so it isn't spent on top of one. |
 | 04 | crustdata-signals | 2 credits per company enrich + 0.03 per person result (~2.6 credits/domain with a typical hire pull) | 15 RPM enrich · 30 RPM person search | Credit price is plan-dependent. Cached JSONs are free - the skill reuses prior runs before spending. |
 | 04 | theirstack-jobs | 1 credit per job returned, exactly. Sizing counts: free without company filters (discover); ~1 credit against a domain list (blur disables on company identifiers) | none published (script spaces ~0.4s/call) | The sizing count returns exact job AND company totals - use it as the estimate, not a guess. No charge dedup on re-pulls; per-domain cache reused across runs. Check-mode cap defaults to 10 jobs/domain. |
 | 05 | signal-builder | $0 API - model judgment only | n/a | The cost is session time, not credits. |
@@ -37,6 +38,12 @@ confirmations, it just makes the total visible before step one.
   = $8.20.
 - **03**: `usd = domains x credits_per_mode x usd_per_credit` - e.g. 200 domains, standard
   (~7), Standard plan = 200 x 7 x $0.001 = $1.40.
+- **03 registry extract**: token-billed (1 credit = 15 tokens), so there is no flat
+  per-page number. Extract page 1 only, read the actual charge from the run tracker (or
+  the Firecrawl dashboard when the API omits usage), then `credits ~= pages x page-1
+  actual`. Count pages from the registry's own pagination and state the pilot figure in
+  the estimate before extracting the rest. This is the discovery layer, so price it in
+  place of an 01/02 line, not in addition to one.
 - **04 crustdata**: `credits = domains x ~2.6` - e.g. 1,000 domains = ~2,600 credits.
 - **04 theirstack**: check: `credits = min(total_jobs, domains x per_domain_cap) + ~1`
   (the domain-scoped sizing count bills ~1); discover: `credits = min(total_jobs,

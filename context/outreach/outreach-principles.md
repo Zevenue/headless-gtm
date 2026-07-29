@@ -48,10 +48,10 @@ Do the work before asking for anything. Find something specific and useful for t
 ## Operational principles
 
 ### Signal-based targeting over batch-and-blast
-- Define what signals indicate buying intent for your specific offer
+- Define what signals indicate buying intent for the specific client
 - Build detection into Clay workflows
 - Route signal-triggered leads differently - they get better copy, faster follow-up
-- Batch leads without signals get the segment fallback
+- Batch leads without signals get the pain-led fallback
 
 ### Experiment cadence
 - Every campaign is an experiment with a hypothesis

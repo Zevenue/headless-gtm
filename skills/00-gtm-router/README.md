@@ -39,7 +39,7 @@ the component skills are interchangeable; the routing isn't.
 ## Setup
 
 None for the router itself - it spends no credits and needs no keys. Each
-component skill carries its own auth (see `_shared/CONVENTIONS.md`); a missing key
+component skill carries its own auth (see `headless-gtm-shared/CONVENTIONS.md`); a missing key
 downgrades that step to manual in the plan rather than blocking it.
 
 ## Layout
@@ -53,11 +53,11 @@ downgrades that step to manual in the plan rather than blocking it.
 └── runs/                       (created at runtime) plan.md + manifest.json per run
 ```
 
-Evals for this skill are maintained in Zevenue's private source repo and run
-before every release - skill folders ship without them.
+Evals live outside the skill, at `_evals/00-gtm-router/` - see
+[`_evals/README.md`](../_evals/README.md) for why.
 
-`references/decision-tree.md` reads standalone - the full routing logic as a
-document, no skill required.
+`references/decision-tree.md` is written to double as the public repo's
+`docs/decision-tree.md` - it reads standalone, no skill required.
 
 ## Position in the chain
 
@@ -80,3 +80,7 @@ filters - so the chain doesn't always start at 01-discover/02.
 Upstream of everything; downstream of nothing. The router is also the natural
 kickoff surface: a new-client brief goes in, a costed pilot plan comes out.
 
+## Calibration target
+
+Written to the (A) Opus-optimized standard - lean body, depth in references,
+declarative altitude except at spend gates.

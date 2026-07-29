@@ -8,7 +8,7 @@ JSON files + tracker for resume capability.
 
 Usage:
   # From CLI domains
-  python3 crustdata_signals.py --domains acmerobotics.com,globex.com --hire-days 180
+  python3 crustdata_signals.py --domains serverobotics.com,prenosis.com --hire-days 180
 
   # From an upstream chain records.jsonl (inherits its fields into the output)
   python3 crustdata_signals.py --records path/to/records.jsonl --hire-days 180
@@ -38,6 +38,20 @@ try:
 except ImportError:
     print("ERROR: Missing requests. Run: pip install requests")
     sys.exit(1)
+
+# --- shared helpers + .env loading ------------------------------------------
+_SHARED = Path(__file__).resolve().parents[2] / "headless-gtm-shared"
+if _SHARED.is_dir():
+    sys.path.insert(0, str(_SHARED))
+try:
+    from common import load_env, runs_base
+except ImportError:
+    sys.exit(
+        f"ERROR: cannot find headless-gtm-shared/common.py (looked in {_SHARED}).\n"
+        "Copy skills/headless-gtm-shared/ next to this skill - the chain reads its record "
+        "contract and shared helpers from there."
+    )
+load_env(__file__)
 
 # ---------------------------------------------------------------------------
 # Config
@@ -80,8 +94,9 @@ SKILL_DIR = Path(__file__).resolve().parent.parent
 def get_headers() -> dict:
     api_key = os.environ.get("CRUSTDATA_API_KEY")
     if not api_key:
-        print("ERROR: CRUSTDATA_API_KEY environment variable not set.")
-        print("  export CRUSTDATA_API_KEY=cd_xxx...")
+        print("ERROR: CRUSTDATA_API_KEY is not set (checked the environment "
+              "and any .env in this directory or a parent).")
+        print("  export CRUSTDATA_API_KEY=cd_xxx...  - or add it to .env")
         sys.exit(1)
     return {
         "Authorization": f"Bearer {api_key}",
@@ -495,7 +510,7 @@ def write_records_jsonl(output_dir: Path, tracker: dict):
 
 
 def write_meta(output_dir: Path, tracker: dict):
-    """Write meta.json per _shared/CONVENTIONS.md (run metadata + deviation log)."""
+    """Write meta.json per headless-gtm-shared/CONVENTIONS.md (run metadata + deviation log)."""
     meta_path = output_dir / "meta.json"
     existing = {}
     if meta_path.exists():
@@ -541,7 +556,7 @@ def main():
                         help="How many days back to search for recent hires (default: 180)")
 
     # Output
-    parser.add_argument("--output-dir", help="Output directory (default: auto-generated in skill runs/)")
+    parser.add_argument("--output-dir", help="Output directory (default: auto-generated under ./runs in the CWD)")
     parser.add_argument("--resume", action="store_true", help="Resume a previous run (requires --output-dir)")
 
     args = parser.parse_args()
@@ -550,8 +565,8 @@ def main():
     if args.output_dir:
         output_dir = Path(args.output_dir)
     else:
-        run_id = f"run-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
-        output_dir = SKILL_DIR / "runs" / run_id
+        run_id = f"04-crustdata-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+        output_dir = Path(runs_base(__file__)) / run_id
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Load or create tracker

@@ -83,7 +83,7 @@ python3 scripts/theirstack_jobs.py check \
 # Chain position: read domains from an upstream records.jsonl -
 # every upstream field carries through into the output records
 python3 scripts/theirstack_jobs.py check \
-  --records ../01-prospeo-discover/runs/<run-id>/records.jsonl \
+  --records ./runs/<run-id>/records.jsonl \
   --title "Head of Sales,VP Sales,CRO" --days 30
 
 # Discover companies currently hiring for a role
@@ -122,7 +122,7 @@ signal. 05-signal-builder scores this; this skill only gathers the facts.
 
 ## Output contract
 
-Each run writes `runs/<run-id>/` per `_shared/CONVENTIONS.md`:
+Each run writes `runs/<run-id>/` per `headless-gtm-shared/CONVENTIONS.md`:
 
 ```
 runs/<run-id>/

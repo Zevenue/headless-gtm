@@ -24,7 +24,7 @@ The user provides domain(s) and optionally a mode. Default to standard.
 | standard | 5-8 | Homepage, About, Careers, Blog, Pricing, Customers, Integrations, Product |
 | deep | 5-11 | Standard + Changelog, Leadership |
 | minimal | 3 | Homepage, About only |
-| extract | ~20+ | Structured JSON via LLM extraction |
+| extract | token-billed (varies) | Structured JSON via LLM extraction |
 
 If the user doesn't specify a mode, use standard. Confirm mode before running
 only when the choice is ambiguous or the batch is large (>50 domains).
@@ -42,7 +42,7 @@ python3 scripts/firecrawl_scrape.py --batch domains.txt --mode standard
 python3 scripts/firecrawl_scrape.py --resume runs/<run-folder-name>
 ```
 
-All paths are relative to the skill folder (`firecrawl-research/`).
+All paths are relative to the skill folder (`03-firecrawl-research/`).
 
 The script creates a timestamped run folder under `runs/` with a `tracker.json`
 for progress and per-domain JSON scan files under `runs/<name>/scans/`.
@@ -105,6 +105,73 @@ Extract mode is the best way to get customer/partner/investor data - it uses
 LLM-powered extraction that understands context better than HTML parsing.
 The user can override with a custom schema.
 
+## Directory and registry extraction
+
+Extract mode pointed at a listing site instead of a company site: one
+directory, registry, or association URL in, N company records out. This is the
+discovery path for web-scattered ICPs and the cold-start workflow
+(run-first-campaign) - a licensing registry, professional college, trade
+association directory, or marketplace category page is itself the list.
+
+Run it through the same script, with the built-in listing-row schema:
+
+```bash
+# One listing page -> N company records
+python3 scripts/firecrawl_scrape.py \
+  --domain "https://registry.example.com/search?page=1" --mode extract --schema listing
+
+# Paginated registry: one listing-page URL per line in the file
+python3 scripts/firecrawl_scrape.py --batch pages.txt --mode extract --schema listing
+```
+
+`--schema listing` selects this schema (pass a JSON file path instead for a
+custom one):
+
+```json
+{
+  "companies": [{
+    "name": "string",
+    "website": "string - empty when the listing shows none",
+    "phone": "string - as listed; often the only contact channel",
+    "location": "string - city / region as listed",
+    "category": "string - the listing's own classification",
+    "listing_url": "string - the row's detail-page URL, if any",
+    "registry_id": "string - licence / registration number, if shown"
+  }]
+}
+```
+
+How it differs from company-site extraction:
+
+- **Extract on the listing pages, not the homepage.** Map the site (or read
+  the search/index page) to find where rows actually render. Registries
+  usually paginate: collect the page 2..N URLs from the first page's
+  pagination links into a file and run the `--batch` form above - one extract
+  call per page.
+- **Extract bills by tokens, not per call** - 1 credit = 15 tokens
+  (`references/firecrawl-endpoints.md`), so cost scales with how much text
+  each page carries. Extract the first page alone, read the actual charge
+  (the script records reported usage in the tracker; when the API omits it,
+  check the Firecrawl dashboard), and use that as the per-page figure: a
+  15-page registry costs ~15x page one. State that estimate before running
+  the rest, and the batch thresholds in the cost table below apply as usual.
+- **Rows without websites are normal** - many registrants list no site. The
+  script keeps them with `domain` empty (never a guessed URL): they enter the
+  chain on the `name|city` dedup fallback
+  (`headless-gtm-shared/schema.py:dedup_key`), the phone and listing link stay
+  on the record as the contact channel, and a domain can be resolved later.
+- **The script emits chain records, not raw extraction JSON.** One record per
+  row - `company`, `domain` (may be empty), `website`, `phone`, `city`/`region`
+  from the location field, `category`, plus the listing provenance
+  (`listing_url`, `registry_id`, `source_url`) - written to `records.jsonl`
+  per `headless-gtm-shared/CONVENTIONS.md` and deduped across pages, so
+  01-icp-qualify can judge each row and cite where it came from.
+- **Blocked or empty extraction is a source problem, not a retry loop.**
+  Registries defend themselves. Report what happened and fall through to the
+  next candidate source (second registry, association directory, marketplace,
+  Maps via 02) instead of burning credits on stealth-proxy retries against a
+  hardened site.
+
 ## Cost and credit rules
 
 | Trigger | Action |
@@ -126,7 +193,7 @@ Credit tracking rules - these prevent silent cost overruns:
 
 After each run (single or batch), the script writes `records.jsonl` and `meta.json`
 to the run folder alongside `tracker.json` and `scans/`. Each record carries the
-stage-03 fields per `_shared/CONVENTIONS.md` - `scraped_markdown` keyed by page
+stage-03 fields per `headless-gtm-shared/CONVENTIONS.md` - `scraped_markdown` keyed by page
 type (capped at 15K chars/page; `scans/*.json` keep the full text),
 `pages_scraped`, and `scrape_status` - plus `has_<page>` labels in
 `filters_matched`:
@@ -157,7 +224,7 @@ output records, so the chain record keeps evolving instead of restarting here.
 | Credits running low | Switch to minimal mode |
 | Sheet writer auth fails | Re-auth: `rm ~/.google/token.json` then re-run |
 | Interrupted batch | Resume with `--resume <run-folder-path>` |
-| Script import error | `pip install -r ../_shared/requirements.txt` |
+| Script import error | `pip install -r ../headless-gtm-shared/requirements.txt` |
 
 ## Auth
 

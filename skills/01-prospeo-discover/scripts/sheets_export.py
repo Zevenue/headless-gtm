@@ -3,9 +3,9 @@
 sheets_export.py — Fetch Prospeo company search results and write chain records
 
 Fetches all pages from Prospeo /search-company and writes the run folder the
-rest of the chain consumes (per _shared/CONVENTIONS.md):
+rest of the chain consumes (per headless-gtm-shared/CONVENTIONS.md):
 
-  <skill-dir>/runs/<run-id>/
+  <working-dir>/runs/<run-id>/
   ├── records.jsonl   # one company per line — company, domain, industry, size,
   │                   # location, funding, revenue, keywords, filters_matched
   ├── tracker.json    # pages fetched / total, run status
@@ -45,6 +45,20 @@ import sys
 import time
 from datetime import datetime
 from pathlib import Path
+
+# --- shared helpers + .env loading ------------------------------------------
+_SHARED = Path(__file__).resolve().parents[2] / "headless-gtm-shared"
+if _SHARED.is_dir():
+    sys.path.insert(0, str(_SHARED))
+try:
+    from common import load_env, runs_base
+except ImportError:
+    sys.exit(
+        f"ERROR: cannot find headless-gtm-shared/common.py (looked in {_SHARED}).\n"
+        "Copy skills/headless-gtm-shared/ next to this skill - the chain reads its record "
+        "contract and shared helpers from there."
+    )
+load_env(__file__)
 
 PROSPEO_API_KEY = os.environ.get("PROSPEO_API_KEY", "")
 PROSPEO_BASE_URL = "https://api.prospeo.io"
@@ -220,13 +234,13 @@ def default_run_id(filters: dict) -> str:
         parts.append(str(loc["include"][0]))
     slug = "-".join(re.sub(r"[^a-z0-9]+", "-", p.lower()).strip("-") for p in parts if p)
     date = datetime.now().strftime("%Y-%m-%d")
-    return f"{date}-{slug}" if slug else f"{date}-prospeo-search"
+    return f"{date}-01-prospeo-{slug}" if slug else f"{date}-01-prospeo-search"
 
 
 def write_run_folder(run_dir: Path, companies: list, filters: dict,
                      total_count: int, pages_fetched: int, pages_total: int,
                      credits_used: int, credits_remaining) -> Path:
-    """Write records.jsonl + tracker.json + meta.json per _shared/CONVENTIONS.md."""
+    """Write records.jsonl + tracker.json + meta.json per headless-gtm-shared/CONVENTIONS.md."""
     run_dir.mkdir(parents=True, exist_ok=True)
     filter_labels = build_filter_labels(filters)
 
@@ -434,7 +448,7 @@ def main():
         description="Fetch Prospeo search results into a chain run folder; Sheets export opt-in")
     parser.add_argument("--filters", required=True, help="Path to filters JSON file")
     parser.add_argument("--run-id", help="Run folder name (default: date + industry/location slug)")
-    parser.add_argument("--out", help="Base output dir (default: <skill-dir>/runs)")
+    parser.add_argument("--out", help="Base output dir (default: ./runs under the CWD)")
     parser.add_argument("--max-pages", type=int, default=1000, help="Max pages to fetch (default: 1000)")
     parser.add_argument("--dry-run", action="store_true", help="Preview filters and count without fetching")
     parser.add_argument("--sheets", action="store_true", help="Also export to Google Sheets")
@@ -525,7 +539,7 @@ def main():
     # Run folder — the chain contract, written on every run
     print("\nWriting run folder...")
     run_id = args.run_id or default_run_id(filters)
-    base = Path(args.out) if args.out else SKILL_DIR / "runs"
+    base = Path(args.out) if args.out else Path(runs_base(__file__))
     records_path = write_run_folder(
         base / run_id, companies, filters, total_count,
         pages_fetched, pages_to_fetch, credits_used, credits_remaining)

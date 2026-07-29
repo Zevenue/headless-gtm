@@ -50,7 +50,7 @@ screenshot = page.screenshot        # base64 or URL (if requested)
 - `wait_for` helps with JS-heavy sites
 - `screenshot` format option: same credit, 0 extra cost
 
-### /extract - Structured field extraction (1 credit)
+### /extract - Structured field extraction (token-billed)
 
 ```python
 result = app.extract(
@@ -64,7 +64,15 @@ result = app.extract(
 )
 ```
 
-- 1 credit per extraction
+- **Billing is token-based, NOT per call: 1 credit = 15 tokens.** Cost scales
+  with page content, schema, and output size - never assume 1 credit per
+  extraction. Pilot one page, read the actual charge, then scale.
+- Read usage from the response when present (`tokens_used` / `tokensUsed`);
+  the script converts tokens to credits at 15 tokens/credit. When the API
+  omits usage, the charge is unknown - check the dashboard before scaling up.
+- Fixed-price alternative: `/scrape` with the `json` format costs a flat 5
+  credits/page (1 base + 4 for JSON mode) - use it when cost predictability
+  matters more than multi-row extraction quality.
 - LLM-driven: pass a schema and get structured JSON back
 - Best for quick field pulls without full page scraping
 

@@ -40,7 +40,7 @@ Auth comes from an environment variable - no keys are stored in the skill.
 
 ```bash
 export APIFY_API_TOKEN="your-apify-token"   # console.apify.com -> Settings -> Integrations
-pip install -r ../_shared/requirements.txt
+pip install -r ../headless-gtm-shared/requirements.txt
 ```
 
 ## Layout

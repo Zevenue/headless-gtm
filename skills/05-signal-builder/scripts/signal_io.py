@@ -9,7 +9,7 @@ Stdlib only. Three subcommands:
              record to the run's records.jsonl.
   status     Show done/pending counts for a run.
   deviation  Append a contract-deviation note to a run's meta.json (see
-             _shared/CONVENTIONS.md — any run that can't follow the documented
+             headless-gtm-shared/CONVENTIONS.md — any run that can't follow the documented
              contract records what it did and why).
 
 The judgment itself is NOT here — the model reads each bundle, judges, and
@@ -26,7 +26,7 @@ from pathlib import Path
 
 PAGE_CONTENT_CAP = 15000          # chars per page kept in a bundle
 MAX_SIGNALS = 5
-APPROACHES = {"PQS", "PVP", "Pain-led"}
+APPROACHES = {"Pain-led", "Value-led", "Segment fallback"}
 SOURCE_RE = re.compile(r"^(https?://\S+|[a-z0-9_-]+:[a-z0-9_.-]+:\S+)$", re.I)
 
 
@@ -366,7 +366,7 @@ def cmd_emit(args):
 def cmd_deviation(args):
     """Append {skill, what, why, at} to meta.json deviations[]. Works on any
     chain run folder (not just 05's) — the run-time complement to the
-    build-time contract eval."""
+    build-time contract eval in _evals/_contract/."""
     run_dir = Path(args.run)
     if not run_dir.is_dir():
         sys.exit(f"ERROR: run folder not found: {run_dir}")

@@ -20,7 +20,7 @@ Usage:
 
   # Check a domain list (per-domain pulls, cached, resumable)
   python3 theirstack_jobs.py check --domains stripe.com,notion.so --title "SDR,BDR" --days 30
-  python3 theirstack_jobs.py check --records ../01-prospeo-discover/runs/x/records.jsonl --days 30
+  python3 theirstack_jobs.py check --records ./runs/2026-07-27-01-prospeo-search/records.jsonl --days 30
 
   # Discover companies currently hiring for a role
   python3 theirstack_jobs.py discover --title "Sales Development" --country US \
@@ -60,39 +60,33 @@ REQUEST_DELAY = 0.4        # polite spacing between calls; TheirStack publishes 
 
 SKILL_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# --- shared helpers + .env loading ------------------------------------------
+_SHARED = os.path.normpath(os.path.join(SKILL_DIR, "..", "headless-gtm-shared"))
+if os.path.isdir(_SHARED):
+    sys.path.insert(0, _SHARED)
+try:
+    from common import load_env, runs_base
+except ImportError:
+    sys.exit(
+        f"ERROR: cannot find headless-gtm-shared/common.py (looked in {_SHARED}).\n"
+        "Copy skills/headless-gtm-shared/ next to this skill - the chain reads its record "
+        "contract and shared helpers from there."
+    )
+
 
 # ---------------------------------------------------------------------------
 # Auth + HTTP
 # ---------------------------------------------------------------------------
 
-def _load_dotenv_fallback() -> None:
-    """Minimal .env loader so the script has no hard dependency on python-dotenv."""
-    try:
-        from dotenv import load_dotenv  # type: ignore
-        load_dotenv()
-        return
-    except ImportError:
-        pass
-    for candidate in (".env", os.path.join(os.getcwd(), ".env")):
-        if os.path.isfile(candidate):
-            with open(candidate, encoding="utf-8") as fh:
-                for line in fh:
-                    line = line.strip()
-                    if not line or line.startswith("#") or "=" not in line:
-                        continue
-                    key, _, value = line.partition("=")
-                    os.environ.setdefault(key.strip(), value.strip().strip("'\""))
-            return
-
-
 def get_api_key() -> str:
     key = os.environ.get("THEIRSTACK_API_KEY", "").strip()
     if not key:
-        _load_dotenv_fallback()
+        load_env(__file__)
         key = os.environ.get("THEIRSTACK_API_KEY", "").strip()
     if not key:
         sys.exit(
-            "ERROR: THEIRSTACK_API_KEY is not set (env or .env).\n"
+            "ERROR: THEIRSTACK_API_KEY is not set (checked the environment and "
+            "any .env in this directory or a parent).\n"
             "Get a key at https://app.theirstack.com/settings/api"
         )
     return key
@@ -325,8 +319,8 @@ def resolve_run_dir(args, mode: str) -> str:
         run_dir = os.path.abspath(args.run_dir)
     else:
         base = os.path.abspath(args.out) if getattr(args, "out", None) \
-            else os.path.join(SKILL_DIR, "runs")
-        slug = args.run_id or slugify(mode, (args.title or "").split(",")[0] or "jobs")
+            else runs_base(__file__)
+        slug = args.run_id or slugify("04-theirstack", mode, (args.title or "").split(",")[0] or "jobs")
         run_dir = os.path.join(base, slug)
     os.makedirs(os.path.join(run_dir, "domains"), exist_ok=True)
     return run_dir
@@ -635,7 +629,7 @@ def add_run_flags(parser: argparse.ArgumentParser) -> None:
                         help="skip the credit-gate confirmation")
     parser.add_argument("--count-only", action="store_true",
                         help="print the free count and exit - 0 credits")
-    parser.add_argument("--out", help="runs base dir (default <skill>/runs/)")
+    parser.add_argument("--out", help="runs base dir (default: ./runs under the CWD)")
     parser.add_argument("--run-id", help="run folder slug (default date+mode+title)")
     parser.add_argument("--run-dir", help="exact run folder (for --resume)")
 

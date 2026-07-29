@@ -27,6 +27,20 @@ except ImportError:
     print("ERROR: Missing dependencies. Run: pip install gspread google-auth")
     sys.exit(1)
 
+# --- shared helpers + .env loading ------------------------------------------
+_SHARED = Path(__file__).resolve().parents[2] / "headless-gtm-shared"
+if _SHARED.is_dir():
+    sys.path.insert(0, str(_SHARED))
+try:
+    from common import load_env
+except ImportError:
+    sys.exit(
+        f"ERROR: cannot find headless-gtm-shared/common.py (looked in {_SHARED}).\n"
+        "Copy skills/headless-gtm-shared/ next to this skill - the chain reads its record "
+        "contract and shared helpers from there."
+    )
+load_env(__file__)
+
 TOKEN_PATH = os.environ.get("GOOGLE_TOKEN_PATH", os.path.expanduser("~/.google/token.json"))
 CREDS_PATH = os.environ.get("GOOGLE_CREDENTIALS_PATH", os.path.expanduser("~/.google/credentials.json"))
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]

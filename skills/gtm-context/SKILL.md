@@ -22,10 +22,10 @@ It also audits the existing outreach principles and playbook files, surfaces any
 ## When to invoke
 
 Invoke this skill when:
-- The user has just cloned `gtm-skills` and is setting up for the first time
+- The user has just installed `headless-gtm` and is setting up for the first time
 - The user is starting work on a new GTM motion or new ICP and the existing context is stale
-- Another skill (e.g., `signal-builder`) reports missing context and asks the user to set it up
-- The user explicitly runs `/gtm-context`
+- Another skill (e.g., `05-signal-builder`) reports missing context and asks the user to set it up
+- The user asks for it by name (`/gtm-context` in Claude Code, `$gtm-context` in Codex)
 
 ## Process
 
@@ -87,7 +87,7 @@ If yes, output:
 
 ```
 ✅ Context layer ready.
-   /signal-builder, /email-writer, /creative-variable will now load:
+   05-signal-builder, email-writer, creative-variable will now load:
    - context/offer.md
    - context/icp.md
    - context/outreach/*
@@ -108,9 +108,9 @@ If the user gives you fluffy answers ("we help companies grow"), push back. Ask 
 ## What this skill does NOT do
 
 - It doesn't write copy. That's `email-writer`.
-- It doesn't score signals. That's `signal-builder`.
-- It doesn't pull data. That's `prospect-posts` and `job-search`.
-- It doesn't replace `CLAUDE.md`. CLAUDE.md is the workspace-level conversation context. This skill produces the GTM-specific facts that the other skills load on demand.
+- It doesn't score signals. That's `05-signal-builder`.
+- It doesn't pull data. That's `prospect-posts` and `04-theirstack-jobs`.
+- It doesn't replace `CLAUDE.md` / `AGENTS.md`. Those are the workspace-level conversation context. This skill produces the GTM-specific facts that the other skills load on demand.
 
 ## Reference
 

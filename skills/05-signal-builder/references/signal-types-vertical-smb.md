@@ -29,13 +29,13 @@ local outlets, hiring posts naming a new neighborhood.
 **Implies:** whatever ran on the owner's phone and memory now has to run twice.
 Systems pain arrives with the lease.
 **Score:** 8-10 within ~6 months of the opening; 6-7 after it settles.
-**Approach:** PQS - "Saw the [neighborhood] opening. Most owners tell us the second
+**Approach:** Pain-led - "Saw the [neighborhood] opening. Most owners tell us the second
 location is where [manual process] stops working."
 
 ### Multi-location operator
 **Look for:** 3+ locations listed; "our locations" page.
 **Implies:** past the breaking point; either they built systems or they're bleeding.
-**Score:** 6-8 · **Approach:** Pain-led on cross-location consistency.
+**Score:** 6-8 · **Approach:** Segment fallback on cross-location consistency.
 
 ## 2. Reviews & reputation signals
 
@@ -44,7 +44,7 @@ location is where [manual process] stops working."
 rating and reviews_count). A busy business collecting no fresh reviews, or a sudden
 influx after years of quiet.
 **Implies:** stall - nobody owns the ask; spike - growth or a push that needs follow-through.
-**Score:** 6-8 · **Approach:** PVP - a quick read of their review pattern vs. nearby
+**Score:** 6-8 · **Approach:** Value-led - a quick read of their review pattern vs. nearby
 competitors is a real artifact.
 
 ### Rating slipping on an operational theme
@@ -52,7 +52,7 @@ competitors is a real artifact.
 friction, no-shows, waitlists, response time.
 **Implies:** the pain has reached their customers; the owner likely knows.
 **Score:** 7-9 when the theme maps to what the client fixes.
-**Approach:** PQS on the pattern ("last month's reviews mention booking three times"),
+**Approach:** Pain-led on the pattern ("last month's reviews mention booking three times"),
 never quoting one reviewer.
 
 ## 3. Platform & marketplace signals
@@ -64,19 +64,19 @@ marketplace listings, footer badges.
 Fee-heavy or feature-capped platforms carry visible friction.
 **Score:** 8-10 when the platform is the client's direct competitor and friction is
 visible (fee complaints, workarounds, "DM to book" next to a booking tool); 5-7 bare.
-**Approach:** PQS on the known friction of that specific platform.
+**Approach:** Pain-led on the known friction of that specific platform.
 
 ### Scattered stack
 **Look for:** one tool for booking, another for payments, a newsletter service, DMs
 for changes - visible as four different embeds and links.
 **Implies:** the owner is the integration layer.
-**Score:** 6-8 · **Approach:** Pain-led on the stitching cost.
+**Score:** 6-8 · **Approach:** Segment fallback on the stitching cost.
 
 ### Marketplace-dependent revenue
 **Look for:** most traffic routed through a marketplace listing (class packs, ticket
 platforms, aggregator pages) rather than their own site.
 **Implies:** margin and customer-relationship pain; platform fee sensitivity.
-**Score:** 6-8 · **Approach:** PVP - show what direct revenue would look like.
+**Score:** 6-8 · **Approach:** Value-led - show what direct revenue would look like.
 
 ## 4. Staffing signals
 
@@ -84,13 +84,13 @@ platforms, aggregator pages) rather than their own site.
 **Look for:** "we're hiring" pages or posts for desk staff, coordinators, managers.
 **Implies:** throughput pain; admin load outgrew the current team.
 **Score:** 6-8 (8 when the posting describes the exact task the client automates).
-**Approach:** PQS quoting the posting's own words.
+**Approach:** Pain-led quoting the posting's own words.
 
 ### Owner doing everything
 **Look for:** the owner is the named contact for booking, events, complaints, and
 press; "text me directly" language.
 **Implies:** no slack in the system; pitch time-back, not features.
-**Score:** 5-7 · **Approach:** Pain-led, short email, time framing.
+**Score:** 5-7 · **Approach:** Segment fallback, short email, time framing.
 
 ## 5. Website & digital state signals
 
@@ -99,13 +99,13 @@ press; "text me directly" language.
 no booking path at all, unclaimed or inconsistent Maps data.
 **Implies:** either nobody owns digital, or it's owned by someone with no time.
 **Score:** 5-7 for clients selling web/digital services; 3-4 as context otherwise.
-**Approach:** PVP - a specific list of what's broken is a genuine artifact.
+**Approach:** Value-led - a specific list of what's broken is a genuine artifact.
 
 ### Fresh relaunch or rebrand
 **Look for:** "new site", redesign announcements, renovation posts, "under new
 management".
 **Implies:** investment mood; open to changing tools while everything's in motion.
-**Score:** 6-8 within ~3 months · **Approach:** PQS on what the relaunch usually
+**Score:** 6-8 within ~3 months · **Approach:** Pain-led on what the relaunch usually
 surfaces next.
 
 ### Seasonal ramp
@@ -122,13 +122,13 @@ to the season date.
 **Look for:** strong social following or engaged community next to a thin
 booking/payment path.
 **Implies:** demand exists; capture doesn't.
-**Score:** 6-8 for clients that monetize community · **Approach:** PVP with a
+**Score:** 6-8 for clients that monetize community · **Approach:** Value-led with a
 concrete "here's what [their audience size] usually converts to" read.
 
 ### Event cadence
 **Look for:** regular events, workshops, pop-ups listed anywhere.
 **Implies:** recurring coordination load; every event is the pain repeating.
-**Score:** 5-7 · **Approach:** Pain-led on the per-event overhead.
+**Score:** 5-7 · **Approach:** Segment fallback on the per-event overhead.
 
 ## 7. Combinations (lead with these when present)
 

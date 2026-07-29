@@ -32,7 +32,18 @@ Auth reads from environment variables. Nothing is hardcoded.
 - `PROSPEO_API_KEY` - required for every Prospeo call.
 - Google Sheets export reads OAuth credentials from `GOOGLE_TOKEN_PATH` (default `~/.google/token.json`). Only needed when exporting.
 
-The curl examples use `$PROSPEO_API_KEY` as the key.
+The curl examples use `$PROSPEO_API_KEY` as the key. **A `.env` file is not
+visible to curl** - load it into the shell first, in the same command as the
+call, or curl sends an empty `X-KEY` header and the API returns a confusing
+auth error instead of a missing-key one:
+
+```bash
+set -a; [ -f .env ] && . ./.env; set +a
+curl -s -H "X-KEY: $PROSPEO_API_KEY" https://api.prospeo.io/account-information
+```
+
+Check `$PROSPEO_API_KEY` is non-empty before the first paid call. The Python
+scripts under `scripts/` read `.env` themselves and need no such prelude.
 
 ## API basics
 
@@ -191,7 +202,7 @@ If `total_count` is over 2,000, suggest narrowing before a full export. If it's 
 
 Export uses the Python script, which paginates the search and writes the chain run folder. Don't paginate the API by hand for exports.
 
-**Script**: `scripts/sheets_export.py` · **Deps**: `pip install -r ../_shared/requirements.txt` (only the opt-in Sheets export needs the `gspread`/`google-auth` extras in that file)
+**Script**: `scripts/sheets_export.py` · **Deps**: `pip install -r ../headless-gtm-shared/requirements.txt` (only the opt-in Sheets export needs the `gspread`/`google-auth` extras in that file)
 
 ```bash
 # Preview count without spending export credits
@@ -218,8 +229,8 @@ The script also asks for confirmation itself before fetching more than 10 pages,
 
 ## Shared output (runs/<run-id>/)
 
-Every export writes a run folder under this skill's `runs/` per
-`_shared/CONVENTIONS.md`: `records.jsonl` (the file downstream skills consume),
+Every export writes a run folder under `./runs/` in the working directory, per
+`headless-gtm-shared/CONVENTIONS.md`: `records.jsonl` (the file downstream skills consume),
 `tracker.json` (pages fetched / status), and `meta.json` (filters, counts,
 credits). Each record carries the stage-01 fields:
 

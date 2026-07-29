@@ -1,4 +1,4 @@
-# Shared Conventions - gtm-skills chain
+# Shared Conventions - the Headless GTM chain
 
 Every skill in this repo follows the same output and directory rules so the chain
 composes cleanly and the router (00) can hand one skill's output to the next
@@ -33,16 +33,31 @@ Nothing downstream should ever depend on the CSV.
 
 ## The `runs/` directory convention
 
-Every skill that produces output writes it under its **own** `runs/` folder,
-resolved relative to the skill directory (never a hardcoded absolute path):
+Every skill that produces output writes it under a `runs/` folder in the
+**working directory** - the project you launched the run from, never a
+hardcoded absolute path and never the skill's own folder:
 
 ```
-<skill-dir>/runs/<run-id>/
+./runs/<run-id>/
 ├── records.jsonl        # canonical output - the chain reads this
 ├── tracker.json         # progress + resume state (in-progress / done / failed per item)
 ├── meta.json            # run metadata: date, inputs, credits/$ spent, counts
 └── records.csv          # OPTIONAL human export (derived from records.jsonl)
 ```
+
+**Why the CWD and not the skill folder.** A skill installed under
+`~/.claude/skills` or `~/.codex/skills` is a read-only package: writing there
+can fall outside the agent's sandbox, and it files client data inside a
+dependency where nobody will look for it or think to gitignore it. Output
+belongs to the project. `common.runs_base()` resolves this - use it rather than
+deriving a path from `__file__`. `--out` (or `--output-dir`) overrides it, and a
+non-writable CWD falls back to the skill directory.
+
+Because every skill in a chain now shares one `runs/` root, run-ids carry the
+producing step: `2026-07-07-01-prospeo-saas-us`, then
+`2026-07-07-04-crustdata-saas-us`. Downstream skills take an explicit
+`--records ./runs/<run-id>/records.jsonl`, so nothing depends on guessing a
+sibling skill's folder.
 
 - **`<run-id>`** is a timestamp+slug (e.g. `2026-07-07-salons-toronto`). Do not
   use `Date.now()`-style values that break resume; a stable slug is fine.
@@ -54,7 +69,7 @@ resolved relative to the skill directory (never a hardcoded absolute path):
   documented contract appends `{skill, what, why, at}` - via
   `05-signal-builder/scripts/signal_io.py deviation --run <folder> --skill …
   --what … --why …` - instead of silently working around it. The build-time
-  complement is the chain's offline contract eval.
+  complement is the contract eval in `_evals/_contract/`.
 - A skill that received an upstream `records.jsonl` saves it as
   **`upstream.jsonl`** in its own run folder, so the writer can inherit fields
   and a resume doesn't lose them.
@@ -76,6 +91,7 @@ no `www.`, no trailing slash).
 | 01 | prospeo-discover | `company, domain, industry, size, location, funding, revenue, keywords, description` |
 | 02 | apify-maps-discover | `company, domain, phone, full_address, city, region, rating, reviews_count, place_id, category` |
 | 03 | firecrawl-research | `scraped_markdown` (by page type), `pages_scraped`, `scrape_status` |
+| 03 | firecrawl-research (directory/registry extract) | one record per listing row: `website, phone, city, region, category, listing_url, registry_id, source_url` - `domain` may be `""` when the listing shows no site |
 | 04 | crustdata-signals | `funding[], headcount_growth, dept_growth[], recent_hires[]` |
 | 04 | theirstack-jobs | `open_roles_count, roles_window_days, jobs[] {title, url, date_posted, seniority, hiring_team}`, plus free firmographics (`employee_count, funding_stage, industry`) when present |
 | 05 | signal-builder | `signals[] {signal_type, signal_sentence, source_url, score, approach}`, `fallback_approach {approach, angle}` |
@@ -84,16 +100,22 @@ no `www.`, no trailing slash).
 A skill inherits any field already present (e.g. 06 inherits `domain` +
 `person?` from upstream) and only asks the user for genuine gaps.
 
-Two shape notes:
+Three shape notes:
 
 - 03's `scraped_markdown` is keyed by page type and capped at **15K chars per
   page** (matching 05's bundle cap) - the run's `scans/*.json` keep the full
   text.
 - 04's `recent_hires[]` caps at 25 entries - the per-domain JSONs keep the
   full list.
+- Directory/registry extraction (03's `--schema listing` mode) emits
+  discovery-shaped records, and rows without websites keep `domain: ""` - they
+  dedup on the `name|city` fallback (`schema.py:dedup_key`), with `phone` and
+  `listing_url` as the contact channel until a site is resolved. Steps that
+  require a domain (06) skip those rows rather than fail.
 
-**This contract is enforced, not aspirational:** an offline contract eval
-validates every writer's output against these shapes before anything ships.
+**This contract is enforced, not aspirational:** `_evals/_contract/` validates
+every writer's output against these shapes offline. Run it after touching any
+record writer.
 
 ---
 
@@ -112,8 +134,14 @@ validates every writer's output against these shapes before anything ships.
 
 ## Where evals live
 
-Eval suites are maintained in Zevenue's private source repo, never inside a
-skill folder. A skill directory holds only what ships: `SKILL.md`, `references/`,
-`scripts/`, and its runtime `runs/`. Chain-level evals - including the contract
-eval that asserts every writer matches the shared record shape - run before
-every release.
+**Eval suites live in `_evals/<skill-folder-name>/`, never inside a skill
+folder.** A skill directory holds only what ships: `SKILL.md`, `references/`,
+`scripts/`, and its runtime `runs/`.
+
+Two reasons. Public extraction copies skill folders wholesale, and per-skill
+evals are not the public norm - shipping them once leaked real prospect domains
+through a mirror. And chain-level evals (the contract eval that asserts every
+writer matches the shared record shape) belong to no single skill.
+
+`evals.json` `files:` paths stay relative to their own eval folder, so a suite
+moves as one unit. See [`../_evals/README.md`](../_evals/README.md).
