@@ -1,6 +1,6 @@
 {
   "name": "headless-gtm",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "GTM without the SaaS layer: an outbound pipeline built as agent skills. Describe an ICP in plain English and the chain takes it from company discovery to verified, signal-ranked contacts - every step on raw vendor APIs, with cost approved before any credit is spent.",
   "author": {
     "name": "Zevenue"

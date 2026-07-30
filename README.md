@@ -109,9 +109,11 @@ The installer detects your agent and writes to `.claude/skills/` (Claude Code) o
 ```bash
 git clone https://github.com/Zevenue/headless-gtm.git
 cd headless-gtm
+mkdir -p .claude/skills && cp -R skills/* .claude/skills/   # Claude Code
+mkdir -p .agents/skills && cp -R skills/* .agents/skills/   # Codex
 ```
 
-`claude` or `codex` started in this directory finds the skills with no install step - `.claude/skills` and `.agents/skills` are symlinks to `skills/`. Don't run `npx skills add` here; it would install the repo into itself.
+The copy line makes `claude` or `codex` started in this directory find the skills. (These used to be symlinks committed to the repo, but committed symlinks break web-based plugin installers - e.g. the Cowork plugin directory - so the copy is now a local step.)
 
 **C. Copy by hand** - `cp -R skills/* ~/.claude/skills/` (or `~/.codex/skills/`, or a project's `.claude/skills/`). If you copy individual skills rather than all of them, **bring `skills/headless-gtm-shared/` too** - the chain skills import their helpers and read the record contract from it, and they exit with an explicit error if it's missing.
 

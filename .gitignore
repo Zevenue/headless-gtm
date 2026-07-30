@@ -31,3 +31,7 @@ out/
 .claude/plans/
 .claude/memory/
 skills/*/runs/
+
+# route-B local skill copies (formerly committed symlinks - broke web-based plugin ingestion)
+.claude/skills/
+.agents/skills/
